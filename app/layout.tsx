@@ -1,18 +1,16 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
-import localFont from "next/font/local";
+import {
+  minionProRegular,
+  minionProItalic,
+  minionProBold,
+  minionProBoldItalic,
+} from "./fonts";
 
 import "./globals.css";
+import { Geist } from "next/font/google";
+import { cn } from "@/lib/utils";
 
-const minionProItalic = localFont({
-  src: "../public/fonts/Minion-Pro-Italic.ttf",
-  variable: "--font-minion-pro-italic",
-});
-
-const minionProBold = localFont({
-  src: "../public/fonts/Minion-Pro-Bold.ttf",
-  variable: "--font-minion-pro-bold",
-});
+const geist = Geist({subsets:['latin'],variable:'--font-sans'});
 
 export const metadata: Metadata = {
   title: "DICK - DISKs Interna Catan Klub",
@@ -27,7 +25,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${minionProBold.variable} ${minionProItalic.variable} h-full antialiased`}
+      className={cn("h-full", "antialiased", minionProRegular.variable, minionProItalic.variable, minionProBold.variable, minionProBoldItalic.variable, "font-sans", geist.variable)}
     >
       <body className="min-h-screen w-screen">{children}</body>
     </html>

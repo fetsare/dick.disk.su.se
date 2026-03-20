@@ -9,6 +9,12 @@ export default async function ProfilePage() {
     redirect("/login");
   }
 
-  return <ProfileForm name={user.name} email={user.email} role={user.role} />;
+  return (
+    <ProfileForm
+      name={user.name}
+      email={user.email}
+      role={user.role}
+      profileImageUrl={user.profile_image_url}
+    />
+  );
 }
-

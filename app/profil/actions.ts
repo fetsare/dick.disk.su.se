@@ -5,6 +5,7 @@ import { revalidatePath } from "next/cache";
 import { getCurrentUser } from "@/lib/session";
 import { hashPassword } from "@/lib/hash-password";
 import bcrypt from "bcryptjs";
+import { put } from "@vercel/blob";
 
 export async function updateProfile(formData: FormData) {
   const user = await getCurrentUser();
@@ -108,4 +109,53 @@ export async function updateProfile(formData: FormData) {
   revalidatePath("/profil");
 
   return { success: true as const };
+}
+
+export async function uploadProfileImage(formData: FormData) {
+  const user = await getCurrentUser();
+  if (!user) {
+    return { error: "Du måste vara inloggad." };
+  }
+
+  const file = formData.get("profileImage");
+  if (!(file instanceof File)) {
+    return { error: "Ogiltig bildfil." };
+  }
+
+  if (!file.type.startsWith("image/")) {
+    return { error: "Endast bildfiler är tillåtna." };
+  }
+
+  // Optional: 4MB size limit
+  const MAX_SIZE = 2 * 1024 * 1024;
+  if (file.size > MAX_SIZE) {
+    return { error: "Bilden får vara max 2 MB." };
+  }
+
+  if (!process.env.BLOB_READ_WRITE_TOKEN) {
+    throw new Error("BLOB_READ_WRITE_TOKEN är inte satt");
+  }
+
+  const blob = await put(`profiles/${user.id}`, file, {
+    access: "public",
+    token: process.env.BLOB_READ_WRITE_TOKEN,
+    allowOverwrite: true
+  });
+
+  const databaseUrl = process.env.DATABASE_URL;
+  if (!databaseUrl) {
+    throw new Error("DATABASE_URL är inte satt");
+  }
+
+  const sql = neon(databaseUrl);
+
+  await sql`
+    UPDATE users
+    SET profile_image_url = ${blob.url}
+    WHERE id = ${user.id}
+  `;
+
+  revalidatePath("/profil");
+
+  return { success: true as const, url: blob.url };
 }

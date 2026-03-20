@@ -10,6 +10,8 @@ import Navbar from "@/components/Navbar";
 import "./globals.css";
 import Footer from "@/components/Footer";
 import Image from "next/image";
+import { Toaster } from "sonner";
+import { AuthProvider } from "@/lib/auth-context";
 
 export const metadata: Metadata = {
   title: "DICK - DISKs Interna Catan Klub",
@@ -33,22 +35,25 @@ export default function RootLayout({
   `}
     >
       <body>
-        <div className="flex min-h-screen flex-col w-screen text-foreground">
-          <Navbar />
-          <main className="flex-1 relative w-full overflow-hidden">
-            <div className="pointer-events-none fixed inset-0 -z-10">
-              <Image
-                src="/catan.jpg"
-                alt="Catan landscape"
-                fill
-                priority
-                className="object-cover brightness-75 blur-xs"
-              />
-            </div>
-            {children}
-          </main>
-          <Footer />
-        </div>
+        <AuthProvider>
+          <div className="flex min-h-screen flex-col w-screen text-foreground">
+            <Navbar />
+            <main className="flex-1 relative w-full overflow-hidden">
+              <div className="pointer-events-none fixed inset-0 -z-10">
+                <Image
+                  src="/catan.jpg"
+                  alt="Catan landscape"
+                  fill
+                  priority
+                  className="object-cover brightness-75 blur-xs"
+                />
+              </div>
+              {children}
+            </main>
+            <Footer />
+            <Toaster />
+          </div>
+        </AuthProvider>
       </body>
     </html>
   );

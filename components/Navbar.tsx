@@ -3,7 +3,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { Menu, X } from "lucide-react";
 import { useState } from "react";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import { useAuth } from "@/lib/auth-context";
 
 export interface NavbarItem {
   label: string;
@@ -32,12 +33,14 @@ export const NAVIGATION_ITEMS: NavbarItem[] = [
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
+  const router = useRouter();
+  const { user, loading, logout } = useAuth();
 
   const toggleMenu = () => setIsOpen((prev) => !prev);
   const closeMenu = () => setIsOpen(false);
 
   return (
-    <header className="sticky top-0 z-50 bg-background/40 px-4 py-3 backdrop-blur-md md:px-6 md:py-4 relative">
+    <header className="sticky top-0 z-50 bg-background/40 px-4 py-3 backdrop-blur-md md:px-6 md:py-4">
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-4">
         <Link
           href="/"
@@ -73,9 +76,37 @@ export default function Navbar() {
               {item.label}
             </Link>
           ))}
+
+          {!loading &&
+            (user ? (
+              <>
+                <Link
+                  href="/profil"
+                  className="minion-bold inline-flex items-center text-xs uppercase tracking-[0.2em] text-foreground hover:text-royal-gold-400 md:text-sm"
+                >
+                  Profil
+                </Link>
+                <button
+                  type="button"
+                  onClick={() => {
+                    logout();
+                    router.push("/");
+                  }}
+                  className="minion-bold inline-flex items-center text-xs uppercase tracking-[0.2em] text-foreground hover:text-royal-gold-400 md:text-sm"
+                >
+                  Logga ut
+                </button>
+              </>
+            ) : (
+              <Link
+                href="/login"
+                className="minion-bold inline-flex items-center text-xs uppercase tracking-[0.2em] text-foreground hover:text-royal-gold-400 md:text-sm"
+              >
+                Logga in
+              </Link>
+            ))}
         </nav>
 
-        {/* Mobile menu button */}
         <button
           type="button"
           onClick={toggleMenu}
@@ -105,6 +136,38 @@ export default function Navbar() {
                 {item.label}
               </Link>
             ))}
+
+            {!loading &&
+              (user ? (
+                <>
+                  <Link
+                    href="/profile"
+                    onClick={closeMenu}
+                    className="minion-bold flex items-center py-2 text-sm uppercase tracking-[0.18em] text-foreground hover:text-royal-gold-400"
+                  >
+                    Profil
+                  </Link>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      logout();
+                      closeMenu();
+                      router.push("/");
+                    }}
+                    className="minion-bold flex items-center py-2 text-sm uppercase tracking-[0.18em] text-foreground hover:text-royal-gold-400"
+                  >
+                    Logga ut
+                  </button>
+                </>
+              ) : (
+                <Link
+                  href="/login"
+                  onClick={closeMenu}
+                  className="minion-bold flex items-center py-2 text-sm uppercase tracking-[0.18em] text-foreground hover:text-royal-gold-400"
+                >
+                  Logga in
+                </Link>
+              ))}
           </div>
         </nav>
       )}

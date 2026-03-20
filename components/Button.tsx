@@ -6,9 +6,9 @@ type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
 
 export function Button({ className = "", ...props }: ButtonProps) {
   const base =
-  "inline-flex items-center justify-center rounded-full cursor-pointer lettering " +
-    "px-6 py-3 " +
-    "bg-royal-gold-500 text-red-800 " +
+    "inline-flex items-center justify-center rounded-full cursor-pointer lettering " +
+    "px-6 py-3 font-minion-bold " +
+    "bg-royal-gold-500 text-black " +
     "border-0 outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-transparent " +
     "transition-colors duration-150";
 

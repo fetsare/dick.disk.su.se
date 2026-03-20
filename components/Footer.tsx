@@ -122,38 +122,59 @@ export default function Footer() {
       </div>
 
       <div>
-        <div className="mx-auto flex max-w-5xl items-center justify-start gap-5 border-t border-foreground/30 px-4 py-4">
-          <a
-            href="https://dick.fredriketsare.se"
-            target="_blank"
-            rel="noreferrer"
-          >
-            <Image
-              src="/logos/logs.jpg"
-              alt="DICK logo"
-              width={100}
-              height={100}
-              className="h-12 w-12 object-contain"
-            />
-          </a>
+        <div className="mx-auto flex max-w-5xl items-center justify-between gap-5 border-t border-foreground/30 px-4 py-4">
+          <div className="flex items-center gap-5">
+            <a
+              href="https://dick.fredriketsare.se"
+              target="_blank"
+              rel="noreferrer"
+            >
+              <Image
+                src="/logos/logs.jpg"
+                alt="DICK logo"
+                width={100}
+                height={100}
+                className="h-12 w-12 object-contain"
+              />
+            </a>
 
-          <a href="https://disk.su.se" target="_blank" rel="noreferrer">
+            <a href="https://disk.su.se" target="_blank" rel="noreferrer">
+              <Image
+                src="/logos/disk.png"
+                alt="DISK logo"
+                width={120}
+                height={120}
+                className="h-12 w-auto object-contain"
+              />
+            </a>
+
             <Image
-              src="/logos/disk.png"
-              alt="DISK logo"
+              src="/logos/SK.svg"
+              alt="SK logo"
               width={120}
               height={120}
               className="h-12 w-auto object-contain"
             />
-          </a>
+          </div>
 
-          <Image
-            src="/logos/SK.svg"
-            alt="SK logo"
-            width={120}
-            height={120}
-            className="h-12 w-auto object-contain"
-          />
+          <div className="flex flex-col items-end gap-1 text-xs md:text-sm">
+            <a
+              href="https://github.com/fetsare/dick.disk.su.se"
+              target="_blank"
+              rel="noreferrer"
+              className="flex items-center gap-2 lettering text-foreground transition-colors hover:text-royal-gold-400"
+            >
+              <span>GitHub</span>
+            </a>
+            <a
+              href="https://en.wikipedia.org/wiki/Catan"
+              target="_blank"
+              rel="noreferrer"
+              className="lettering text-foreground transition-colors hover:text-royal-gold-400"
+            >
+              Catan på Wikipedia
+            </a>
+          </div>
         </div>
       </div>
     </footer>

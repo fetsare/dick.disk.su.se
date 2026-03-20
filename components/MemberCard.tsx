@@ -19,19 +19,19 @@ const sizeStyles: Record<
   }
 > = {
   sm: {
-    container: "w-40 gap-3 p-4 text-center",
+    container: "w-40 min-h-40 gap-3 p-4 text-center",
     image: "h-16 w-16",
     name: "text-sm",
     role: "inline-flex items-center rounded-full border border-border/60 bg-secondary/80 px-2.5 py-0.5 text-[11px] font-medium uppercase tracking-[0.16em] text-foreground/90",
   },
   md: {
-    container: "w-52 gap-3 p-5 text-center",
+    container: "w-52 min-h-52 gap-3 p-5 text-center",
     image: "h-20 w-20",
     name: "text-base",
     role: "inline-flex items-center rounded-full border border-border/60 bg-secondary/80 px-3 py-0.5 text-[11px] font-medium uppercase tracking-[0.18em] text-foreground",
   },
   lg: {
-    container: "w-64 gap-4 p-6 text-center",
+    container: "w-64 min-h-64 gap-4 p-6 text-center",
     image: "h-24 w-24",
     name: "text-lg",
     role: "inline-flex items-center rounded-full border border-border/60 bg-secondary/80 px-3.5 py-0.5 text-xs font-semibold uppercase tracking-[0.2em] text-foreground",
@@ -72,7 +72,7 @@ export function MemberCard({
       <div className="flex flex-col items-center gap-1">
         <h3
           className={`
-            font-minion-bold tracking-[0.12em] uppercase
+            font-minion-bold tracking-[0.12em] uppercase text-royal-gold-400
             ${styles.name}
           `}
         >

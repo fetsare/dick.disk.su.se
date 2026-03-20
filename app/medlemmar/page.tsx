@@ -40,23 +40,30 @@ export default async function Members() {
     <div className="flex flex-col items-center w-full px-4 py-8 md:py-10">
       <PageTitle>Medlemmar</PageTitle>
 
-      <section className="w-full max-w-5xl mt-6 rounded-xl px-4 py-5 md:px-6 md:py-6">
-        {members.length === 0 ? (
-          <p className="text-sm text-foreground/70">Inga medlemmar ännu.</p>
-        ) : (
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-            {members.map((member) => (
-              <MemberCard
-                key={member.id}
-                name={member.name}
-                profileImageUrl={member.profile_image_url}
-                role={member.role}
-                size="md"
-              />
-            ))}
+      <div
+        className="
+          mt-6
+          grid
+          w-full
+          max-w-6xl
+          grid-cols-2
+          gap-4
+          md:grid-cols-3
+          lg:grid-cols-4
+          xl:grid-cols-5
+        "
+      >
+        {members.map((member) => (
+          <div key={member.id} className="flex justify-center">
+            <MemberCard
+              name={member.name}
+              profileImageUrl={member.profile_image_url}
+              role={member.role}
+              size="md"
+            />
           </div>
-        )}
-      </section>
+        ))}
+      </div>
     </div>
   );
 }

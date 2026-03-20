@@ -1,16 +1,16 @@
-import type { Metadata } from "next";
-import { PageTitle } from "@/components/PageTitle";
-import { neon } from "@neondatabase/serverless";
-import { MemberCard } from "@/components/MemberCard";
-import { pagesMetadata } from "../metadata";
+import type { Metadata } from 'next';
+import { PageTitle } from '@/components/PageTitle';
+import { neon } from '@neondatabase/serverless';
+import { MemberCard } from '@/components/MemberCard';
+import { pagesMetadata } from '../metadata';
 
 export const metadata: Metadata = pagesMetadata.members;
 
 type Member = {
   id: string;
   name: string;
-  role: "member" | "admin";
   profile_image_url?: string | null;
+  created_at: string;
 };
 
 export const revalidate = 86400;
@@ -18,13 +18,13 @@ export const revalidate = 86400;
 async function getMembers(): Promise<Member[]> {
   const databaseUrl = process.env.DATABASE_URL;
   if (!databaseUrl) {
-    throw new Error("DATABASE_URL is not set");
+    throw new Error('DATABASE_URL is not set');
   }
 
   const sql = neon(databaseUrl);
 
   const rows = await sql`
-    SELECT id, name, role, profile_image_url
+  SELECT id, name, role, profile_image_url, created_at
     FROM users
     WHERE is_active = TRUE
     ORDER BY name ASC
@@ -57,7 +57,7 @@ export default async function Members() {
               <MemberCard
                 name={member.name}
                 profileImageUrl={member.profile_image_url}
-                role={member.role}
+                createdAt={member.created_at}
                 size="md"
               />
             </div>

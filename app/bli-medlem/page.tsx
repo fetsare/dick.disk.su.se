@@ -1,7 +1,7 @@
-import type { Metadata } from "next";
-import { PageTitle } from "@/components/PageTitle";
-import { BecomeMemberForm } from "./BecomeMemberForm";
-import { pagesMetadata } from "../metadata";
+import type { Metadata } from 'next';
+import { PageTitle } from '@/components/PageTitle';
+import { BecomeMemberForm } from './BecomeMemberForm';
+import { pagesMetadata } from '../metadata';
 
 export const metadata: Metadata = pagesMetadata.becomeMember;
 

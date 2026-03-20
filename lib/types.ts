@@ -1,4 +1,4 @@
-export type UserRole = "admin" | "member";
+export type UserRole = 'admin' | 'member';
 
 export type UserDb = {
   id: string; //uuid
@@ -11,4 +11,4 @@ export type UserDb = {
   profile_image_url?: string | null;
 };
 
-export type User = Omit<UserDb, "password_hash">;
+export type User = Omit<UserDb, 'password_hash'>;

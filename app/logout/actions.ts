@@ -1,8 +1,8 @@
-"use server";
+'use server';
 
-import { cookies } from "next/headers";
+import { cookies } from 'next/headers';
 
-const SESSION_COOKIE = "session";
+const SESSION_COOKIE = 'session';
 
 export async function serverLogout() {
   const cookieStore = await cookies();

@@ -1,7 +1,7 @@
-import type { Metadata } from "next";
-import { PageTitle } from "@/components/PageTitle";
-import LoginForm from "./LoginForm";
-import { pagesMetadata } from "../metadata";
+import type { Metadata } from 'next';
+import { PageTitle } from '@/components/PageTitle';
+import LoginForm from './LoginForm';
+import { pagesMetadata } from '../metadata';
 
 export const metadata: Metadata = pagesMetadata.login;
 

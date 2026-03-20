@@ -1,8 +1,9 @@
-import type { Metadata } from "next";
+import type { Metadata } from 'next';
 
-const baseUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://dick.disk.su.se";
-const siteName = "DICK – DISKs Interna Catan Klub";
-const siteDescription = "DICK är DISKs interna Catan-klubb på DSV, Stockholms universitet. Bli medlem och läs mer om oss.";
+const baseUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://dick.disk.su.se';
+const siteName = 'DICK – DISKs Interna Catan Klub';
+const siteDescription =
+  'DICK är DISKs interna Catan-klubb på DSV, Stockholms universitet. Bli medlem och läs mer om oss.';
 
 export const defaultMetadata: Metadata = {
   metadataBase: new URL(baseUrl),
@@ -17,10 +18,10 @@ export const defaultMetadata: Metadata = {
     description: siteDescription,
     url: baseUrl,
     siteName,
-    type: "website",
+    type: 'website',
   },
   twitter: {
-    card: "summary_large_image",
+    card: 'summary_large_image',
     title: siteName,
     description: siteDescription,
   },
@@ -32,29 +33,29 @@ export const defaultMetadata: Metadata = {
 
 export const pagesMetadata = {
   about: {
-    title: "Om oss",
+    title: 'Om oss',
   },
   members: {
-    title: "Medlemmar",
+    title: 'Medlemmar',
   },
   profile: {
-    title: "Profil",
+    title: 'Profil',
   },
   becomeMember: {
-    title: "Bli medlem",
+    title: 'Bli medlem',
   },
   becomeMemberThanks: {
-    title: "Tack för din anmälan",
+    title: 'Tack för din anmälan',
   },
   login: {
-    title: "Logga in",
+    title: 'Logga in',
   },
   admin: {
-    title: "Admin",
+    title: 'Admin',
     robots: { index: false, follow: false },
   },
   logout: {
-    title: "Logga ut",
+    title: 'Logga ut',
     robots: { index: false, follow: false },
   },
 } satisfies Record<string, Metadata>;

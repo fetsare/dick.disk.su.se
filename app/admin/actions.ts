@@ -1,9 +1,9 @@
-"use server";
+'use server';
 
-import { neon } from "@neondatabase/serverless";
-import { revalidatePath } from "next/cache";
-import { getCurrentUser } from "@/lib/session";
-import { hashPassword } from "@/lib/hash-password";
+import { neon } from '@neondatabase/serverless';
+import { revalidatePath } from 'next/cache';
+import { getCurrentUser } from '@/lib/session';
+import { hashPassword } from '@/lib/hash-password';
 
 export type MemberRequest = {
   id: string;
@@ -17,7 +17,7 @@ export type MemberRequest = {
 export async function getPendingRequests(): Promise<MemberRequest[]> {
   const databaseUrl = process.env.DATABASE_URL;
   if (!databaseUrl) {
-    throw new Error("DATABASE_URL is not set");
+    throw new Error('DATABASE_URL is not set');
   }
 
   const sql = neon(databaseUrl);
@@ -33,11 +33,10 @@ export async function getPendingRequests(): Promise<MemberRequest[]> {
 }
 
 function generateTempPassword(length = 12): string {
-  const chars =
-    "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789!@#$%^&*";
-  let pwd = "";
+  const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789!@#$%^&*';
+  let pwd = '';
   const array = new Uint32Array(length);
-  if (typeof crypto !== "undefined" && "getRandomValues" in crypto) {
+  if (typeof crypto !== 'undefined' && 'getRandomValues' in crypto) {
     crypto.getRandomValues(array);
     for (let i = 0; i < length; i++) {
       pwd += chars[array[i] % chars.length];
@@ -55,13 +54,13 @@ function generateTempPassword(length = 12): string {
 
 export async function approveRequest(id: string) {
   const admin = await getCurrentUser();
-  if (!admin || admin.role !== "admin") {
-    throw new Error("Endast admin kan godkänna ansökningar.");
+  if (!admin || admin.role !== 'admin') {
+    throw new Error('Endast admin kan godkänna ansökningar.');
   }
 
   const databaseUrl = process.env.DATABASE_URL;
   if (!databaseUrl) {
-    throw new Error("DATABASE_URL is not set");
+    throw new Error('DATABASE_URL is not set');
   }
 
   const sql = neon(databaseUrl);
@@ -70,7 +69,7 @@ export async function approveRequest(id: string) {
   await sql`BEGIN`;
   const tempPassword = generateTempPassword();
   const passwordHash = await hashPassword(tempPassword);
-  let reqEmail = "";
+  let reqEmail = '';
   try {
     const requests = await sql`
       SELECT id, email, name
@@ -80,16 +79,14 @@ export async function approveRequest(id: string) {
       LIMIT 1
     `;
 
-    const req = requests[0] as
-      | { id: string; email: string; name: string }
-      | undefined;
+    const req = requests[0] as { id: string; email: string; name: string } | undefined;
 
     if (!req) {
       await sql`ROLLBACK`;
-      throw new Error("Ansökan hittades inte eller är redan hanterad.");
-  }
+      throw new Error('Ansökan hittades inte eller är redan hanterad.');
+    }
 
-  reqEmail = req.email;
+    reqEmail = req.email;
 
     await sql`
       UPDATE member_requests
@@ -110,19 +107,19 @@ export async function approveRequest(id: string) {
     throw err;
   }
 
-  revalidatePath("/admin");
+  revalidatePath('/admin');
   return { tempPassword, email: reqEmail };
 }
 
 export async function rejectRequest(id: string) {
   const admin = await getCurrentUser();
-  if (!admin || admin.role !== "admin") {
-    throw new Error("Endast admin kan avslå ansökningar.");
+  if (!admin || admin.role !== 'admin') {
+    throw new Error('Endast admin kan avslå ansökningar.');
   }
 
   const databaseUrl = process.env.DATABASE_URL;
   if (!databaseUrl) {
-    throw new Error("DATABASE_URL is not set");
+    throw new Error('DATABASE_URL is not set');
   }
 
   const sql = neon(databaseUrl);
@@ -133,5 +130,5 @@ export async function rejectRequest(id: string) {
     WHERE id = ${id} AND status = 'pending'
   `;
 
-  revalidatePath("/admin");
+  revalidatePath('/admin');
 }

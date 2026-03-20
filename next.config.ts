@@ -1,18 +1,18 @@
-import type { NextConfig } from "next";
+import type { NextConfig } from 'next';
 
 const blobHostname = process.env.BLOB_HOSTNAME;
 
 const nextConfig: NextConfig = {
   experimental: {
     serverActions: {
-      bodySizeLimit: "2mb",
+      bodySizeLimit: '2mb',
     },
   },
   images: {
     remotePatterns: blobHostname
       ? [
           {
-            protocol: "https",
+            protocol: 'https',
             hostname: blobHostname,
           },
         ]

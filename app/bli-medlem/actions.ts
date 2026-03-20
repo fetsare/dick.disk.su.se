@@ -1,7 +1,7 @@
-"use server";
+'use server';
 
-import { neon } from "@neondatabase/serverless";
-import { redirect } from "next/navigation";
+import { neon } from '@neondatabase/serverless';
+import { redirect } from 'next/navigation';
 
 export async function createMemberRequest(
   _prevState: { error: string | null },
@@ -9,17 +9,17 @@ export async function createMemberRequest(
 ) {
   const databaseUrl = process.env.DATABASE_URL;
   if (!databaseUrl) {
-    throw new Error("DATABASE_URL is not set");
+    throw new Error('DATABASE_URL is not set');
   }
 
   const sql = neon(databaseUrl);
 
-  const name = formData.get("name");
-  const email = formData.get("email");
-  const motivation = formData.get("motivation");
+  const name = formData.get('name');
+  const email = formData.get('email');
+  const motivation = formData.get('motivation');
 
   if (!name || !email || !motivation) {
-    return { error: "Du måste fylla i alla fält." };
+    return { error: 'Du måste fylla i alla fält.' };
   }
 
   const existing = await sql`
@@ -31,7 +31,7 @@ export async function createMemberRequest(
   const count = Number((existing as { count: number }[])[0]?.count ?? 0);
 
   if (count > 0) {
-    return { error: "Denna e‑postadress har redan använts för en ansökan." };
+    return { error: 'Denna e‑postadress har redan använts för en ansökan.' };
   }
 
   await sql`
@@ -39,5 +39,5 @@ export async function createMemberRequest(
     VALUES (${name}, ${email}, ${motivation})
   `;
 
-  redirect("/bli-medlem/tack");
+  redirect('/bli-medlem/tack');
 }

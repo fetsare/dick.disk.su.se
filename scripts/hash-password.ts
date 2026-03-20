@@ -1,12 +1,12 @@
-import { hashPassword } from "../lib/hash-password";
+import { hashPassword } from '../lib/hash-password';
 
 async function main() {
-  const password = "TestPassword123!";
+  const password = 'TestPassword123!';
 
   const hash = await hashPassword(password);
 
-  console.log("Plain password:", password);
-  console.log("Hashed password:", hash);
+  console.log('Plain password:', password);
+  console.log('Hashed password:', hash);
 }
 
 main().catch((err) => {

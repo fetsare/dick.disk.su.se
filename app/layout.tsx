@@ -1,18 +1,13 @@
-import type { Metadata } from "next";
-import {
-  minionProRegular,
-  minionProItalic,
-  minionProBold,
-  minionProBoldItalic,
-} from "./fonts";
-import Navbar from "@/components/Navbar";
+import type { Metadata } from 'next';
+import { minionProRegular, minionProItalic, minionProBold, minionProBoldItalic } from './fonts';
+import Navbar from '@/components/Navbar';
 
-import "./globals.css";
-import Footer from "@/components/Footer";
-import Image from "next/image";
-import { Toaster } from "sonner";
-import { AuthProvider } from "@/lib/auth-context";
-import { defaultMetadata } from "./metadata";
+import './globals.css';
+import Footer from '@/components/Footer';
+import Image from 'next/image';
+import { Toaster } from 'sonner';
+import { AuthProvider } from '@/lib/auth-context';
+import { defaultMetadata } from './metadata';
 
 export const metadata: Metadata = defaultMetadata;
 

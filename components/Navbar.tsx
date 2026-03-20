@@ -1,11 +1,11 @@
-"use client";
-import Image from "next/image";
-import Link from "next/link";
-import { Menu, X } from "lucide-react";
-import { useState, useTransition } from "react";
-import { usePathname, useRouter } from "next/navigation";
-import { useAuth } from "@/lib/auth-context";
-import { serverLogout } from "@/app/logout/actions";
+'use client';
+import Image from 'next/image';
+import Link from 'next/link';
+import { Menu, X } from 'lucide-react';
+import { useState, useTransition } from 'react';
+import { usePathname, useRouter } from 'next/navigation';
+import { useAuth } from '@/lib/auth-context';
+import { serverLogout } from '@/app/logout/actions';
 
 export interface NavbarItem {
   label: string;
@@ -14,36 +14,36 @@ export interface NavbarItem {
 
 export const BASE_NAVIGATION_ITEMS: NavbarItem[] = [
   {
-    label: "Hem",
-    link: "/",
+    label: 'Hem',
+    link: '/',
   },
   {
-    label: "Medlemmar",
-    link: "/medlemmar",
+    label: 'Medlemmar',
+    link: '/medlemmar',
   },
   {
-    label: "Bli medlem",
-    link: "/bli-medlem",
+    label: 'Bli medlem',
+    link: '/bli-medlem',
   },
   {
-    label: "Om oss",
-    link: "/om-oss",
+    label: 'Om oss',
+    link: '/om-oss',
   },
 ];
 
 export const MEMBER_NAVIGATION_ITEMS: NavbarItem[] = [
   ...BASE_NAVIGATION_ITEMS,
   {
-    label: "Profil",
-    link: "/profil",
+    label: 'Profil',
+    link: '/profil',
   },
 ];
 
 export const ADMIN_NAVIGATION_ITEMS: NavbarItem[] = [
   ...MEMBER_NAVIGATION_ITEMS,
   {
-    label: "Admin",
-    link: "/admin",
+    label: 'Admin',
+    link: '/admin',
   },
 ];
 
@@ -57,11 +57,12 @@ export default function Navbar() {
   const toggleMenu = () => setIsOpen((prev) => !prev);
   const closeMenu = () => setIsOpen(false);
 
-  const navigationItems = user?.role === "admin"
-    ? ADMIN_NAVIGATION_ITEMS
-    : user
-    ? MEMBER_NAVIGATION_ITEMS
-    : BASE_NAVIGATION_ITEMS;
+  const navigationItems =
+    user?.role === 'admin'
+      ? ADMIN_NAVIGATION_ITEMS
+      : user
+        ? MEMBER_NAVIGATION_ITEMS
+        : BASE_NAVIGATION_ITEMS;
 
   return (
     <header className="sticky top-0 z-50 bg-background/40 px-4 py-3 backdrop-blur-md md:px-6 md:py-4">
@@ -80,9 +81,7 @@ export default function Navbar() {
               className="h-full w-full object-contain"
             />
           </div>
-          <span className="lettering-reduced text-2xl text-royal-gold-400 md:text-3xl">
-            DICK
-          </span>
+          <span className="lettering-reduced text-2xl text-royal-gold-400 md:text-3xl">DICK</span>
         </Link>
 
         {/* Desktop nav */}
@@ -93,8 +92,8 @@ export default function Navbar() {
               href={item.link}
               className={`minion-bold inline-flex items-center text-xs uppercase tracking-[0.2em] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-royal-gold-400 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent md:text-sm ${
                 pathname === item.link
-                  ? "text-royal-gold-400"
-                  : "text-foreground hover:text-royal-gold-400"
+                  ? 'text-royal-gold-400'
+                  : 'text-foreground hover:text-royal-gold-400'
               }`}
             >
               {item.label}
@@ -109,7 +108,7 @@ export default function Navbar() {
                   startTransition(async () => {
                     await serverLogout();
                     logout();
-                    router.push("/");
+                    router.push('/');
                   });
                 }}
                 className="minion-bold inline-flex items-center text-xs uppercase tracking-[0.2em] text-foreground hover:text-royal-gold-400 md:text-sm"
@@ -130,7 +129,7 @@ export default function Navbar() {
           type="button"
           onClick={toggleMenu}
           className="inline-flex items-center justify-center rounded-md p-2 text-foreground hover:text-royal-gold-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-royal-gold-400 focus-visible:ring-offset-2 md:hidden"
-          aria-label={isOpen ? "Stäng meny" : "Öppna meny"}
+          aria-label={isOpen ? 'Stäng meny' : 'Öppna meny'}
           aria-expanded={isOpen}
         >
           {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
@@ -148,8 +147,8 @@ export default function Navbar() {
                 onClick={closeMenu}
                 className={`minion-bold flex items-center py-2 text-sm uppercase tracking-[0.18em] transition-colors ${
                   pathname === item.link
-                    ? "text-royal-gold-400"
-                    : "text-foreground hover:text-royal-gold-400"
+                    ? 'text-royal-gold-400'
+                    : 'text-foreground hover:text-royal-gold-400'
                 }`}
               >
                 {item.label}
@@ -166,7 +165,7 @@ export default function Navbar() {
                         await serverLogout();
                         logout();
                         closeMenu();
-                        router.push("/");
+                        router.push('/');
                       });
                     }}
                     className="minion-bold flex items-center py-2 text-sm uppercase tracking-[0.18em] text-foreground hover:text-royal-gold-400"

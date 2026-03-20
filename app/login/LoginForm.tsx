@@ -1,12 +1,12 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { useFormStatus } from "react-dom";
-import { useRouter } from "next/navigation";
-import { login } from "./actions";
-import { Button } from "@/components/Button";
-import { FormField } from "@/components/FormField";
-import { useAuth } from "@/lib/auth-context";
+import { useState } from 'react';
+import { useFormStatus } from 'react-dom';
+import { useRouter } from 'next/navigation';
+import { login } from './actions';
+import { Button } from '@/components/Button';
+import { FormField } from '@/components/FormField';
+import { useAuth } from '@/lib/auth-context';
 
 function SubmitButton() {
   const { pending } = useFormStatus();
@@ -16,7 +16,7 @@ function SubmitButton() {
       className="mt-4 w-full rounded bg-foreground px-4 py-2 text-background disabled:opacity-60"
       disabled={pending}
     >
-      {pending ? "Loggar in..." : "Logga in"}
+      {pending ? 'Loggar in...' : 'Logga in'}
     </Button>
   );
 }
@@ -39,10 +39,10 @@ export default function LoginForm() {
         if (result?.success && result.user) {
           setAuthUser(result.user);
 
-          if (result.user.role === "admin") {
-            router.push("/admin");
+          if (result.user.role === 'admin') {
+            router.push('/admin');
           } else {
-            router.push("/");
+            router.push('/');
           }
         }
       }}

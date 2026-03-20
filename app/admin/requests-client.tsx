@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import { useState, useTransition } from "react";
-import { Button } from "@/components/Button";
-import type { MemberRequest } from "./actions";
-import { approveRequest, rejectRequest } from "./actions";
+import { useState, useTransition } from 'react';
+import { Button } from '@/components/Button';
+import type { MemberRequest } from './actions';
+import { approveRequest, rejectRequest } from './actions';
 
 type AdminRequestsProps = {
   initialRequests: MemberRequest[];
@@ -12,9 +12,7 @@ type AdminRequestsProps = {
 export function AdminRequests({ initialRequests }: AdminRequestsProps) {
   const [requests, setRequests] = useState(initialRequests);
   const [isPending, startTransition] = useTransition();
-  const [lastTempPassword, setLastTempPassword] = useState<string | null>(
-    null,
-  );
+  const [lastTempPassword, setLastTempPassword] = useState<string | null>(null);
   const [lastEmail, setLastEmail] = useState<string | null>(null);
 
   const handleApprove = (id: string) => {
@@ -46,16 +44,13 @@ export function AdminRequests({ initialRequests }: AdminRequestsProps) {
             <p className="font-semibold mb-1">Senast genererade lösenord</p>
             <code className="break-all text-sm">{lastTempPassword}</code>
             <p className="mt-1 text-xs text-foreground/70">
-              Kopiera detta lösenord och skicka det till medlemmen via{" "}
+              Kopiera detta lösenord och skicka det till medlemmen via{' '}
               {lastEmail ? (
-                <a
-                  href={`mailto:${lastEmail}`}
-                  className="underline hover:text-royal-gold-400"
-                >
+                <a href={`mailto:${lastEmail}`} className="underline hover:text-royal-gold-400">
                   e‑post
                 </a>
               ) : (
-                "e‑post"
+                'e‑post'
               )}
               .
             </p>
@@ -82,30 +77,20 @@ export function AdminRequests({ initialRequests }: AdminRequestsProps) {
               </div>
               <div>
                 <span className="font-semibold">Motivation:</span>
-                <p className="mt-1 whitespace-pre-wrap text-foreground/90">
-                  {req.motivation}
-                </p>
+                <p className="mt-1 whitespace-pre-wrap text-foreground/90">{req.motivation}</p>
               </div>
               <div className="text-xs text-foreground/60">
-                Skickad: {new Date(req.created_at).toLocaleString("sv-SE")}
+                Skickad: {new Date(req.created_at).toLocaleString('sv-SE')}
               </div>
             </div>
 
             <div className="flex flex-wrap gap-3 pt-2">
-              <Button
-                type="button"
-                disabled={isPending}
-                onClick={() => handleApprove(req.id)}
-              >
-                {isPending ? "Godkänner..." : "Godkänn"}
+              <Button type="button" disabled={isPending} onClick={() => handleApprove(req.id)}>
+                {isPending ? 'Godkänner...' : 'Godkänn'}
               </Button>
 
-              <Button
-                type="button"
-                disabled={isPending}
-                onClick={() => handleReject(req.id)}
-              >
-                {isPending ? "Avslår..." : "Avslå"}
+              <Button type="button" disabled={isPending} onClick={() => handleReject(req.id)}>
+                {isPending ? 'Avslår...' : 'Avslå'}
               </Button>
             </div>
           </li>
@@ -114,21 +99,16 @@ export function AdminRequests({ initialRequests }: AdminRequestsProps) {
 
       {lastTempPassword && (
         <div className="rounded-md border border-border bg-background/60 p-3 text-sm">
-          <p className="font-semibold mb-1">
-            Senast genererade tillfälliga lösenord
-          </p>
+          <p className="font-semibold mb-1">Senast genererade tillfälliga lösenord</p>
           <code className="break-all text-sm">{lastTempPassword}</code>
           <p className="mt-1 text-xs text-foreground/70">
-            Kopiera detta lösenord och skicka det till medlemmen via{" "}
+            Kopiera detta lösenord och skicka det till medlemmen via{' '}
             {lastEmail ? (
-              <a
-                href={`mailto:${lastEmail}`}
-                className="underline hover:text-royal-gold-400"
-              >
+              <a href={`mailto:${lastEmail}`} className="underline hover:text-royal-gold-400">
                 e‑post
               </a>
             ) : (
-              "e‑post"
+              'e‑post'
             )}
             .
           </p>

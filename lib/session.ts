@@ -1,10 +1,10 @@
-"use server";
+'use server';
 
-import { cookies } from "next/headers";
-import { neon } from "@neondatabase/serverless";
-import type { UserDb } from "@/lib/types";
+import { cookies } from 'next/headers';
+import { neon } from '@neondatabase/serverless';
+import type { UserDb } from '@/lib/types';
 
-const SESSION_COOKIE = "session";
+const SESSION_COOKIE = 'session';
 
 export async function getCurrentUser(): Promise<UserDb | null> {
   const cookieStore = await cookies();
@@ -23,7 +23,7 @@ export async function getCurrentUser(): Promise<UserDb | null> {
 
   const databaseUrl = process.env.DATABASE_URL;
   if (!databaseUrl) {
-    throw new Error("DATABASE_URL är inte satt");
+    throw new Error('DATABASE_URL är inte satt');
   }
 
   const sql = neon(databaseUrl);

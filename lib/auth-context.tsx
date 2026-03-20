@@ -1,15 +1,9 @@
-"use client";
+'use client';
 
-import {
-  createContext,
-  useContext,
-  useEffect,
-  useState,
-  useCallback,
-} from "react";
-import { toast } from "sonner";
+import { createContext, useContext, useEffect, useState, useCallback } from 'react';
+import { toast } from 'sonner';
 
-type Role = "admin" | "member";
+type Role = 'admin' | 'member';
 
 type AuthUser = {
   id: string;
@@ -23,7 +17,7 @@ type AuthContextValue = {
   login: (user: AuthUser) => void;
 };
 
-const STORAGE_KEY = "auth:user";
+const STORAGE_KEY = 'auth:user';
 
 const AuthContext = createContext<AuthContextValue | undefined>(undefined);
 
@@ -33,29 +27,29 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const logout = useCallback(() => {
     try {
-      if (typeof window !== "undefined") {
+      if (typeof window !== 'undefined') {
         window.localStorage.removeItem(STORAGE_KEY);
       }
     } catch {
       // ignore
     }
     setUser(null);
-    toast.success("Du har loggats ut.");
+    toast.success('Du har loggats ut.');
   }, []);
 
-   const login = useCallback((nextUser: AuthUser) => {
-     setUser(nextUser);
-     try {
-       if (typeof window !== "undefined") {
-         window.localStorage.setItem(STORAGE_KEY, JSON.stringify(nextUser));
-       }
-     } catch {
-       // ignore
-     }
-   }, []);
+  const login = useCallback((nextUser: AuthUser) => {
+    setUser(nextUser);
+    try {
+      if (typeof window !== 'undefined') {
+        window.localStorage.setItem(STORAGE_KEY, JSON.stringify(nextUser));
+      }
+    } catch {
+      // ignore
+    }
+  }, []);
 
   useEffect(() => {
-    if (typeof window === "undefined") return;
+    if (typeof window === 'undefined') return;
 
     try {
       const stored = window.localStorage.getItem(STORAGE_KEY);
@@ -65,9 +59,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       }
 
       const parsed = JSON.parse(stored) as AuthUser;
-      if (parsed && typeof parsed.id === "string" && parsed.role) {
+      if (parsed && typeof parsed.id === 'string' && parsed.role) {
         setUser(parsed);
-        toast.success("Välkommen tillbaka!");
+        toast.success('Välkommen tillbaka!');
       } else {
         setUser(null);
         window.localStorage.removeItem(STORAGE_KEY);
@@ -80,16 +74,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user, loading, logout, login }}>
-      {children}
-    </AuthContext.Provider>
+    <AuthContext.Provider value={{ user, loading, logout, login }}>{children}</AuthContext.Provider>
   );
 }
 
 export function useAuth() {
   const ctx = useContext(AuthContext);
   if (!ctx) {
-    throw new Error("useAuth must be used within an AuthProvider");
+    throw new Error('useAuth must be used within an AuthProvider');
   }
   return ctx;
 }

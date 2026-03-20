@@ -1,12 +1,12 @@
-import type { MetadataRoute } from "next";
+import type { MetadataRoute } from 'next';
 
 export default function robots(): MetadataRoute.Robots {
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://dick.disk.su.se";
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://dick.disk.su.se';
 
   return {
     rules: {
-      userAgent: "*",
-      allow: "/",
+      userAgent: '*',
+      allow: '/',
     },
     sitemap: `${baseUrl}/sitemap.xml`,
   };

@@ -1,11 +1,13 @@
-import Image from "next/image";
+import Image from 'next/image';
+import { formatMembershipDuration } from '@/lib/format-membership-duration';
 
-export type MemberCardSize = "sm" | "md" | "lg";
+export type MemberCardSize = 'sm' | 'md' | 'lg';
 
 export type MemberCardProps = {
   name: string;
   role?: string;
   profileImageUrl?: string | null;
+  createdAt?: string;
   size?: MemberCardSize;
 };
 
@@ -15,37 +17,29 @@ const sizeStyles: Record<
     container: string;
     image: string;
     name: string;
-    role: string;
   }
 > = {
   sm: {
-    container: "w-40 min-h-40 gap-3 p-4 text-center",
-    image: "h-16 w-16",
-    name: "text-sm",
-    role: "inline-flex items-center rounded-full border border-border/60 bg-secondary/80 px-2.5 py-0.5 text-[11px] font-medium uppercase tracking-[0.16em] text-foreground/90",
+    container: 'w-40 min-h-40 gap-3 p-4 text-center',
+    image: 'h-16 w-16',
+    name: 'text-sm',
   },
   md: {
-    container: "w-52 min-h-52 gap-3 p-5 text-center",
-    image: "h-20 w-20",
-    name: "text-base",
-    role: "inline-flex items-center rounded-full border border-border/60 bg-secondary/80 px-3 py-0.5 text-[11px] font-medium uppercase tracking-[0.18em] text-foreground",
+    container: 'w-52 min-h-52 gap-3 p-5 text-center',
+    image: 'h-20 w-20',
+    name: 'text-base',
   },
   lg: {
-    container: "w-64 min-h-64 gap-4 p-6 text-center",
-    image: "h-24 w-24",
-    name: "text-lg",
-    role: "inline-flex items-center rounded-full border border-border/60 bg-secondary/80 px-3.5 py-0.5 text-xs font-semibold uppercase tracking-[0.2em] text-foreground",
+    container: 'w-64 min-h-64 gap-4 p-6 text-center',
+    image: 'h-24 w-24',
+    name: 'text-lg',
   },
 };
 
-export function MemberCard({
-  name,
-  role,
-  profileImageUrl,
-  size = "md",
-}: MemberCardProps) {
+export function MemberCard({ name, profileImageUrl, createdAt, size = 'md' }: MemberCardProps) {
   const styles = sizeStyles[size];
-  const src = profileImageUrl || "/sheep.jpg";
+  const src = profileImageUrl || '/sheep.jpg';
+  const membershipDuration = formatMembershipDuration(createdAt ?? null);
 
   return (
     <div
@@ -78,7 +72,9 @@ export function MemberCard({
         >
           {name}
         </h3>
-        {role && <span className={styles.role}>{role}</span>}
+        {membershipDuration && (
+          <p className="mt-1 text-sm text-foreground/80">Medlem i {membershipDuration}</p>
+        )}
       </div>
     </div>
   );

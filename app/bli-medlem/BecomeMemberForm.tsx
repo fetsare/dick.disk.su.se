@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
-import Link from "next/link";
-import { Button } from "@/components/Button";
-import { FormField } from "@/components/FormField";
-import { createMemberRequest } from "./actions";
-import { useActionState } from "react";
+import Link from 'next/link';
+import { Button } from '@/components/Button';
+import { FormField } from '@/components/FormField';
+import { createMemberRequest } from './actions';
+import { useActionState } from 'react';
 
 const initialState: { error: string | null } = { error: null };
 
@@ -45,8 +45,7 @@ export function BecomeMemberForm() {
         Skicka ansökan
       </Button>
       <p className="text-md ">
-        Genom att klicka på Skicka Ansökan godkänner du våra
-        {" "}
+        Genom att klicka på Skicka Ansökan godkänner du våra{' '}
         <Link href="/vilkor" className="underline">
           villkor
         </Link>

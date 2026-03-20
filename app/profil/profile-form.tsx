@@ -1,29 +1,21 @@
-"use client";
+'use client';
 
-import { useActionState, useRef, useState } from "react";
-import { PageTitle } from "@/components/PageTitle";
-import { FormField } from "@/components/FormField";
-import { Button } from "@/components/Button";
-import { updateProfile, uploadProfileImage } from "./actions";
+import { useActionState, useRef, useState } from 'react';
+import { PageTitle } from '@/components/PageTitle';
+import { FormField } from '@/components/FormField';
+import { Button } from '@/components/Button';
+import { updateProfile, uploadProfileImage } from './actions';
 
 type ProfileFormProps = {
   name: string;
   email: string;
-  role: "admin" | "member";
+  role: 'admin' | 'member';
   profileImageUrl?: string | null;
 };
 
-export function ProfileForm({
-  name,
-  email,
-  role,
-  profileImageUrl,
-}: ProfileFormProps) {
+export function ProfileForm({ name, email, role, profileImageUrl }: ProfileFormProps) {
   const [state, formAction, pending] = useActionState(
-    async (
-      _prevState: { error: string | null; success: boolean },
-      formData: FormData,
-    ) => {
+    async (_prevState: { error: string | null; success: boolean }, formData: FormData) => {
       const result = await updateProfile(formData);
       if (result.error) {
         return { error: result.error, success: false };
@@ -34,10 +26,7 @@ export function ProfileForm({
   );
 
   const [imageState, imageAction, imagePending] = useActionState(
-    async (
-      _prevState: { error: string | null; success: boolean },
-      formData: FormData,
-    ) => {
+    async (_prevState: { error: string | null; success: boolean }, formData: FormData) => {
       const result = await uploadProfileImage(formData);
       if (result.error) {
         return { error: result.error, success: false };
@@ -56,34 +45,19 @@ export function ProfileForm({
       <section className="w-full max-w-lg rounded-xl px-6 py-6 md:py-8 mb-10 bg-background/80">
         <form action={formAction} className="space-y-4 text-sm">
           <FormField id="name" label="Namn" defaultValue={name} />
-          <FormField
-            id="email"
-            label="E‑post"
-            type="email"
-            defaultValue={email}
-          />
+          <FormField id="email" label="E‑post" type="email" defaultValue={email} />
 
           <div>
             <dt className="font-semibold">Roll</dt>
-            <dd className="mt-1">{role === "admin" ? "Admin" : "Medlem"}</dd>
+            <dd className="mt-1">{role === 'admin' ? 'Admin' : 'Medlem'}</dd>
           </div>
 
           <div className="pt-4 border-t border-border/60 space-y-3">
             <h2 className="text-lg">Byt lösenord</h2>
-            <p>
-              Lämnda dessa fält tomma om du inte vill uppdatera ditt lösenord
-            </p>
-            <FormField
-              id="currentPassword"
-              label="Nuvarande lösenord"
-              type="password"
-            />
+            <p>Lämnda dessa fält tomma om du inte vill uppdatera ditt lösenord</p>
+            <FormField id="currentPassword" label="Nuvarande lösenord" type="password" />
             <FormField id="newPassword" label="Nytt lösenord" type="password" />
-            <FormField
-              id="confirmPassword"
-              label="Bekräfta nytt lösenord"
-              type="password"
-            />
+            <FormField id="confirmPassword" label="Bekräfta nytt lösenord" type="password" />
           </div>
 
           {state.error && <p className="text-sm text-red-500">{state.error}</p>}
@@ -92,7 +66,7 @@ export function ProfileForm({
           )}
 
           <Button className="w-full" type="submit" disabled={pending}>
-            {pending ? "Uppdaterar..." : "Uppdatera"}
+            {pending ? 'Uppdaterar...' : 'Uppdatera'}
           </Button>
         </form>
       </section>
@@ -133,19 +107,17 @@ export function ProfileForm({
               Välj bild
             </Button>
             <span className="text-xs text-foreground/70 truncate">
-              {selectedFileName ?? "Ingen fil vald"}
+              {selectedFileName ?? 'Ingen fil vald'}
             </span>
           </div>
 
-          {imageState.error && (
-            <p className="text-sm text-red-500">{imageState.error}</p>
-          )}
+          {imageState.error && <p className="text-sm text-red-500">{imageState.error}</p>}
           {imageState.success && !imageState.error && (
             <p className="text-sm text-green-600">Profilbild uppdaterad.</p>
           )}
 
           <Button className="w-full" type="submit" disabled={imagePending}>
-            {imagePending ? "Laddar upp..." : "Ladda upp bild"}
+            {imagePending ? 'Laddar upp...' : 'Ladda upp bild'}
           </Button>
         </form>
       </section>

@@ -1,6 +1,7 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
+import { useState } from "react";
 import { NAVIGATION_ITEMS } from "./Navbar";
 
 const SOCIAL_LINKS = [
@@ -10,6 +11,12 @@ const SOCIAL_LINKS = [
 ];
 
 export default function Footer() {
+  const [lignumClicks, setLignumClicks] = useState(0);
+
+  const handleLignumClick = () => {
+    setLignumClicks((prev) => (prev + 1) % 3);
+  };
+
   return (
     <footer className="w-full bg-background text-foreground">
       <div className="mx-auto flex max-w-5xl flex-col items-center gap-8 px-4 py-10">
@@ -32,9 +39,11 @@ export default function Footer() {
           </div>
 
           <div className="hidden flex-col justify-center gap-1 sm:flex">
-            <p className="lettering text-center text-xs text-royal-gold-400 md:text-sm lg:text-base">
-              Lignum habes?
-            </p>
+            <Link href={lignumClicks === 2 ? "/admin" : "#"} onClick={handleLignumClick}>
+              <p className="lettering text-center text-xs text-royal-gold-400 md:text-sm lg:text-base">
+                Lignum habes?
+              </p>
+            </Link>
           </div>
 
           <div className="space-y-4 text-left sm:text-right">

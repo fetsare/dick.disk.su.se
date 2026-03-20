@@ -42,8 +42,18 @@ export default function Footer() {
                 </Link>
               ))}
 
+              {/* Admin-only footer link */}
+              {!loading && user?.role === "admin" && (
+                <Link
+                  href="/admin"
+                  className="lettering text-foreground transition-colors hover:text-royal-gold-400"
+                >
+                  Admin
+                </Link>
+              )}
+
               {!loading && (
-                <div className="mt-2 flex flex-col gap-2">
+                <div className="flex flex-col gap-2">
                   {user ? (
                     <>
                       <Link

@@ -37,32 +37,43 @@ export default async function Members() {
   const members = await getMembers();
 
   return (
-    <div className="flex flex-col items-center w-full px-4 py-8 md:py-10">
+    <div className="flex flex-col items-center w-full py-8 md:py-10">
       <PageTitle>Medlemmar</PageTitle>
 
-      <div
-        className="
-          mt-6
-          grid
-          w-full
-          max-w-6xl
-          grid-cols-2
-          gap-4
-          md:grid-cols-3
-          lg:grid-cols-4
-          xl:grid-cols-5
-        "
-      >
-        {members.map((member) => (
-          <div key={member.id} className="flex justify-center">
-            <MemberCard
-              name={member.name}
-              profileImageUrl={member.profile_image_url}
-              role={member.role}
-              size="md"
-            />
-          </div>
-        ))}
+      {/* Outer container controls side padding + max width */}
+      <div className="mt-6 w-full px-4 sm:px-6 lg:px-8">
+        <div
+          className="
+            mx-auto
+            max-w-6xl
+            grid
+            gap-4
+            grid-cols-[repeat(auto-fit,minmax(160px,1fr))]
+            sm:grid-cols-[repeat(auto-fit,minmax(180px,1fr))]
+            md:grid-cols-[repeat(auto-fit,minmax(200px,1fr))]
+          "
+        >
+          {members.map((member) => (
+            <div key={member.id} className="flex justify-center">
+              <MemberCard
+                name={member.name}
+                profileImageUrl={member.profile_image_url}
+                role={member.role}
+                size="md"
+              />
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Become member button */}
+      <div className="mt-8 flex justify-center">
+        <a
+          href="/bli-medlem"
+          className="inline-flex items-center rounded-md border border-royal-gold-400 px-6 py-3 text-sm font-medium uppercase tracking-[0.18em] text-royal-gold-400 transition-colors hover:bg-royal-gold-400 hover:text-background"
+        >
+          Bli medlem
+        </a>
       </div>
     </div>
   );

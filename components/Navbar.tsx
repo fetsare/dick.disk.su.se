@@ -111,6 +111,16 @@ export default function Navbar() {
                 Logga in
               </Link>
             ))}
+
+          {/* Admin-only link */}
+          {user?.role === "admin" && (
+            <Link
+              href="/admin"
+              className="minion-bold inline-flex items-center text-xs uppercase tracking-[0.2em] text-foreground hover:text-royal-gold-400 md:text-sm"
+            >
+              Admin
+            </Link>
+          )}
         </nav>
 
         <button
@@ -177,6 +187,17 @@ export default function Navbar() {
                   Logga in
                 </Link>
               ))}
+
+            {/* Admin-only mobile link */}
+            {!loading && user?.role === "admin" && (
+              <Link
+                href="/admin"
+                onClick={closeMenu}
+                className="minion-bold flex items-center py-2 text-sm uppercase tracking-[0.18em] text-foreground hover:text-royal-gold-400"
+              >
+                Admin
+              </Link>
+            )}
           </div>
         </nav>
       )}

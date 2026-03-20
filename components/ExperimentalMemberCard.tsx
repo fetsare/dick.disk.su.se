@@ -57,7 +57,7 @@ export function ExperimentalMemberCard({ member, color = 'purple' }: Experimenta
         </div>
       </div>
 
-      <div className="rounded-md bg-[#f5e7c7] px-3 py-1 text-[10px] text-[#3b2c1c] shadow-sm border border-[#b69a6d]">
+      <div className="rounded-md bg-[#f5e7c7] px-3 py-1 text-[13px] text-[#3b2c1c] shadow-sm border border-[#b69a6d]">
         {memberLength}
       </div>
       {member.colonist_link && (

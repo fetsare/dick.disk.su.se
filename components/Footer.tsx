@@ -1,85 +1,91 @@
 import Image from "next/image";
 import Link from "next/link";
-import { NavigationMenuLink } from "@/components/ui/navigation-menu";
 import { NAVIGATION_ITEMS } from "./Navbar";
 
 const SOCIAL_LINKS = [
-  { label: "Instagram", href: "https://instagram.com" },
-  { label: "Facebook", href: "https://facebook.com" },
-  { label: "Discord", href: "https://discord.com" },
+  { label: "Instagram", href: "https://www.instagram.com/studentkarendisk/" },
+  { label: "Facebook", href: "https://www.facebook.com/diskstudentkar" },
+  { label: "Discord", href: "https://discord.gg/q9JXFJjmQ4" },
 ];
 
 export default function Footer() {
   return (
-    <footer className="w-full border-t border-foreground/20 bg-background/80 text-foreground">
-      <div className="mx-auto flex max-w-5xl flex-col gap-8 px-4 py-8 md:flex-row md:items-start md:justify-between">
-        {/* Logo left */}
-        <div className="flex items-start gap-4">
-          <Link href="/" aria-label="Till startsidan">
-            <Image
-              src="/logs.jpg"
-              alt="DICK logo"
-              width={96}
-              height={96}
-              className="h-16 w-16 object-contain md:h-20 md:w-20"
-            />
-          </Link>
-        </div>
-
-        <div className="flex flex-1 flex-col gap-8 md:flex-row md:justify-end">
-          <div className="min-w-35 space-y-3">
-            <h2 className="text-sm font-semibold uppercase tracking-wide">
+    <footer className="w-full text-foreground">
+      <div className="mx-auto flex max-w-5xl flex-col items-center gap-8 px-4 py-10">
+        <div className="grid w-full gap-8 md:grid-cols-[1fr_auto_1fr] md:items-start md:justify-center">
+          <div className="space-y-4">
+            <h2 className="minion-bold text-base uppercase tracking-wide text-accent">
               Genvägar
             </h2>
-            <nav className="flex flex-col gap-2 text-sm">
+            <nav className="flex flex-col gap-3 text-base">
               {NAVIGATION_ITEMS.map((item) => (
-                <NavigationMenuLink
+                <Link
                   key={item.link}
                   href={item.link}
-                  className="text-foreground/80 transition-colors hover:text-foreground"
+                  className="minion-bold text-foreground/85 transition-colors hover:text-accent"
                 >
                   {item.label}
-                </NavigationMenuLink>
+                </Link>
               ))}
             </nav>
           </div>
 
-          <div className="min-w-45 space-y-3">
-            <h2 className="text-sm font-semibold uppercase tracking-wide">
-              Kontakt
-            </h2>
-            <div className="space-y-1 text-sm text-foreground/80">
-              <p>DICK - DISKs Interna Catan Klub</p>
-              <p>
-                E-post:{" "}
-                <Link
-                  href="mailto:dick@disk.su.se"
-                  className="underline-offset-2 hover:underline"
-                >
-                  dick@disk.su.se
-                </Link>
-              </p>
-            </div>
+          <div className="hidden items-center justify-center sm:flex">
+            <p className="minion-bold text-center text-xs uppercase tracking-[0.15em] text-foreground/80 md:text-sm lg:text-base">
+              Lignum habes?
+            </p>
           </div>
 
-          <div className="min-w-40 space-y-3">
-            <h2 className="text-sm font-semibold uppercase tracking-wide">
+          <div className="space-y-4 text-left sm:text-right">
+            <h2 className="minion-bold text-base uppercase tracking-wide text-accent">
               Sociala medier
             </h2>
-            <div className="flex flex-col gap-2 text-sm">
+            <div className="flex flex-col gap-3 text-base">
               {SOCIAL_LINKS.map((social) => (
                 <Link
                   key={social.label}
                   href={social.href}
                   target="_blank"
                   rel="noreferrer"
-                  className="text-foreground/80 transition-colors hover:text-foreground"
+                  className="minion-bold text-foreground/85 transition-colors hover:text-accent"
                 >
                   {social.label}
                 </Link>
               ))}
             </div>
           </div>
+        </div>
+      </div>
+
+      <div className="bg-background/90">
+        <div className="mx-auto flex max-w-5xl items-center justify-start gap-5 border-t border-foreground/15 px-4 py-4">
+          <a href="https://dick.fredriketsare.se" target="_blank" rel="noreferrer">
+            <Image
+              src="/logos/logs.jpg"
+              alt="DICK logo"
+              width={100}
+              height={100}
+              className="h-12 w-12 object-contain"
+            />
+          </a>
+
+          <a href="https://disk.su.se" target="_blank" rel="noreferrer">
+            <Image
+              src="/logos/disk.png"
+              alt="DISK logo"
+              width={120}
+              height={120}
+              className="h-12 w-auto object-contain"
+            />
+          </a>
+
+          <Image
+            src="/logos/SK.svg"
+            alt="SK logo"
+            width={120}
+            height={120}
+            className="h-12 w-auto object-contain"
+          />
         </div>
       </div>
     </footer>

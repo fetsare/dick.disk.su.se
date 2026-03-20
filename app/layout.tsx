@@ -42,10 +42,8 @@ export default function RootLayout({
         <div className="flex min-h-screen flex-col">
           <Navbar />
 
-          <main className="flex flex-1 justify-center px-4 py-8">
-            <div className="flex min-h-[60vh] w-full max-w-4xl flex-col gap-6 md:min-w-160">
-              {children}
-            </div>
+          <main className="flex flex-1">
+            {children}
           </main>
 
           <Footer />

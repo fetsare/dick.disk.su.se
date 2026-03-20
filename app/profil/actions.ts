@@ -95,13 +95,13 @@ export async function updateProfile(formData: FormData) {
   if (updatePassword && passwordHash) {
     await sql`
       UPDATE users
-      SET name = ${trimmedName}, email = ${trimmedEmail}, password_hash = ${passwordHash}
+  SET name = ${trimmedName}, email = ${trimmedEmail}, password_hash = ${passwordHash}, updated_at = NOW()
       WHERE id = ${user.id}
     `;
   } else {
     await sql`
       UPDATE users
-      SET name = ${trimmedName}, email = ${trimmedEmail}
+  SET name = ${trimmedName}, email = ${trimmedEmail}, updated_at = NOW()
       WHERE id = ${user.id}
     `;
   }
@@ -126,7 +126,6 @@ export async function uploadProfileImage(formData: FormData) {
     return { error: "Endast bildfiler är tillåtna." };
   }
 
-  // Optional: 4MB size limit
   const MAX_SIZE = 2 * 1024 * 1024;
   if (file.size > MAX_SIZE) {
     return { error: "Bilden får vara max 2 MB." };
@@ -151,11 +150,14 @@ export async function uploadProfileImage(formData: FormData) {
 
   await sql`
     UPDATE users
-    SET profile_image_url = ${blob.url}
+    SET profile_image_url = ${blob.url}, updated_at = NOW()
     WHERE id = ${user.id}
   `;
 
   revalidatePath("/profil");
+  revalidatePath("/medlemmar");
 
-  return { success: true as const, url: blob.url };
+  const versionedUrl = `${blob.url}?v=${Date.now()}`;
+
+  return { success: true as const, url: versionedUrl };
 }

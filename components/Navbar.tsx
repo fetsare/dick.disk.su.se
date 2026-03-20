@@ -12,7 +12,7 @@ export interface NavbarItem {
   link: string;
 }
 
-export const NAVIGATION_ITEMS: NavbarItem[] = [
+export const BASE_NAVIGATION_ITEMS: NavbarItem[] = [
   {
     label: "Hem",
     link: "/",
@@ -31,6 +31,22 @@ export const NAVIGATION_ITEMS: NavbarItem[] = [
   },
 ];
 
+export const MEMBER_NAVIGATION_ITEMS: NavbarItem[] = [
+  ...BASE_NAVIGATION_ITEMS,
+  {
+    label: "Profil",
+    link: "/profil",
+  },
+];
+
+export const ADMIN_NAVIGATION_ITEMS: NavbarItem[] = [
+  ...MEMBER_NAVIGATION_ITEMS,
+  {
+    label: "Admin",
+    link: "/admin",
+  },
+];
+
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [, startTransition] = useTransition();
@@ -40,6 +56,12 @@ export default function Navbar() {
 
   const toggleMenu = () => setIsOpen((prev) => !prev);
   const closeMenu = () => setIsOpen(false);
+
+  const navigationItems = user?.role === "admin"
+    ? ADMIN_NAVIGATION_ITEMS
+    : user
+    ? MEMBER_NAVIGATION_ITEMS
+    : BASE_NAVIGATION_ITEMS;
 
   return (
     <header className="sticky top-0 z-50 bg-background/40 px-4 py-3 backdrop-blur-md md:px-6 md:py-4">
@@ -65,7 +87,7 @@ export default function Navbar() {
 
         {/* Desktop nav */}
         <nav className="hidden items-center gap-8 md:flex">
-          {NAVIGATION_ITEMS.map((item) => (
+          {navigationItems.map((item) => (
             <Link
               key={item.link}
               href={item.link}
@@ -78,31 +100,22 @@ export default function Navbar() {
               {item.label}
             </Link>
           ))}
-
           {!loading &&
             (user ? (
-              <>
-                <Link
-                  href="/profil"
-                  className="minion-bold inline-flex items-center text-xs uppercase tracking-[0.2em] text-foreground hover:text-royal-gold-400 md:text-sm"
-                >
-                  Profil
-                </Link>
-                <button
-                  type="button"
-                  onClick={() => {
-                    // Clear client auth state and server session cookie
-                    startTransition(async () => {
-                      await serverLogout();
-                      logout();
-                      router.push("/");
-                    });
-                  }}
-                  className="minion-bold inline-flex items-center text-xs uppercase tracking-[0.2em] text-foreground hover:text-royal-gold-400 md:text-sm"
-                >
-                  Logga ut
-                </button>
-              </>
+              <button
+                type="button"
+                onClick={() => {
+                  // Clear client auth state and server session cookie
+                  startTransition(async () => {
+                    await serverLogout();
+                    logout();
+                    router.push("/");
+                  });
+                }}
+                className="minion-bold inline-flex items-center text-xs uppercase tracking-[0.2em] text-foreground hover:text-royal-gold-400 md:text-sm"
+              >
+                Logga ut
+              </button>
             ) : (
               <Link
                 href="/login"
@@ -111,16 +124,6 @@ export default function Navbar() {
                 Logga in
               </Link>
             ))}
-
-          {/* Admin-only link */}
-          {user?.role === "admin" && (
-            <Link
-              href="/admin"
-              className="minion-bold inline-flex items-center text-xs uppercase tracking-[0.2em] text-foreground hover:text-royal-gold-400 md:text-sm"
-            >
-              Admin
-            </Link>
-          )}
         </nav>
 
         <button
@@ -138,7 +141,7 @@ export default function Navbar() {
       {isOpen && (
         <nav className="absolute inset-x-0 top-full z-40 bg-background py-4 backdrop-blur-md md:hidden">
           <div className="mx-auto flex max-w-6xl flex-col gap-1 px-4">
-            {NAVIGATION_ITEMS.map((item) => (
+            {navigationItems.map((item) => (
               <Link
                 key={item.link}
                 href={item.link}
@@ -156,13 +159,6 @@ export default function Navbar() {
             {!loading &&
               (user ? (
                 <>
-                  <Link
-                    href="/profile"
-                    onClick={closeMenu}
-                    className="minion-bold flex items-center py-2 text-sm uppercase tracking-[0.18em] text-foreground hover:text-royal-gold-400"
-                  >
-                    Profil
-                  </Link>
                   <button
                     type="button"
                     onClick={() => {
@@ -187,17 +183,6 @@ export default function Navbar() {
                   Logga in
                 </Link>
               ))}
-
-            {/* Admin-only mobile link */}
-            {!loading && user?.role === "admin" && (
-              <Link
-                href="/admin"
-                onClick={closeMenu}
-                className="minion-bold flex items-center py-2 text-sm uppercase tracking-[0.18em] text-foreground hover:text-royal-gold-400"
-              >
-                Admin
-              </Link>
-            )}
           </div>
         </nav>
       )}

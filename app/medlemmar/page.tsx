@@ -13,7 +13,7 @@ type Member = {
   profile_image_url?: string | null;
 };
 
-export const revalidate = 60;
+export const revalidate = 86400;
 
 async function getMembers(): Promise<Member[]> {
   const databaseUrl = process.env.DATABASE_URL;
@@ -40,7 +40,6 @@ export default async function Members() {
     <div className="flex flex-col items-center w-full py-8 md:py-10">
       <PageTitle>Medlemmar</PageTitle>
 
-      {/* Outer container controls side padding + max width */}
       <div className="mt-6 w-full px-4 sm:px-6 lg:px-8">
         <div
           className="
@@ -66,7 +65,6 @@ export default async function Members() {
         </div>
       </div>
 
-      {/* Become member button */}
       <div className="mt-8 flex justify-center">
         <a
           href="/bli-medlem"

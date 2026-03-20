@@ -39,7 +39,7 @@ export default function RootLayout({
             <main className="flex-1 relative w-full overflow-hidden">
               <div className="pointer-events-none fixed inset-0 -z-10">
                 <Image
-                  src="/catan.jpg"
+                  src="/catan.webp"
                   alt="Catan landscape"
                   fill
                   priority

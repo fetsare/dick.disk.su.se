@@ -2,9 +2,13 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState, useTransition } from "react";
-import { useRouter } from "next/navigation";
-import { NAVIGATION_ITEMS } from "./Navbar";
+import {
+  ADMIN_NAVIGATION_ITEMS,
+  BASE_NAVIGATION_ITEMS,
+  MEMBER_NAVIGATION_ITEMS,
+} from "./Navbar";
 import { useAuth } from "@/lib/auth-context";
+import { useRouter } from "next/navigation";
 import { serverLogout } from "@/app/logout/actions";
 
 const SOCIAL_LINKS = [
@@ -15,13 +19,19 @@ const SOCIAL_LINKS = [
 
 export default function Footer() {
   const [lignumClicks, setLignumClicks] = useState(0);
+  const { user, loading, logout } = useAuth();
   const [, startTransition] = useTransition();
   const router = useRouter();
-  const { user, loading, logout } = useAuth();
 
   const handleLignumClick = () => {
     setLignumClicks((prev) => (prev + 1) % 3);
   };
+
+  const navigationItems = user?.role === "admin"
+    ? ADMIN_NAVIGATION_ITEMS
+    : user
+    ? MEMBER_NAVIGATION_ITEMS
+    : BASE_NAVIGATION_ITEMS;
 
   return (
     <footer className="w-full bg-background text-foreground">
@@ -32,7 +42,7 @@ export default function Footer() {
               Genvägar
             </h2>
             <nav className="flex flex-col gap-3 text-base">
-              {NAVIGATION_ITEMS.map((item) => (
+              {navigationItems.map((item) => (
                 <Link
                   key={item.link}
                   href={item.link}
@@ -42,40 +52,22 @@ export default function Footer() {
                 </Link>
               ))}
 
-              {/* Admin-only footer link */}
-              {!loading && user?.role === "admin" && (
-                <Link
-                  href="/admin"
-                  className="lettering text-foreground transition-colors hover:text-royal-gold-400"
-                >
-                  Admin
-                </Link>
-              )}
-
               {!loading && (
-                <div className="flex flex-col gap-2">
+                <>
                   {user ? (
-                    <>
-                      <Link
-                        href="/profil"
-                        className="lettering text-foreground transition-colors hover:text-royal-gold-400"
-                      >
-                        Profil
-                      </Link>
-                      <button
-                        type="button"
-                        onClick={() => {
-                          startTransition(async () => {
-                            await serverLogout();
-                            logout();
-                            router.push("/");
-                          });
-                        }}
-                        className="lettering text-left text-foreground transition-colors hover:text-royal-gold-400"
-                      >
-                        Logga ut
-                      </button>
-                    </>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        startTransition(async () => {
+                          await serverLogout();
+                          logout();
+                          router.push("/");
+                        });
+                      }}
+                      className="lettering text-left text-foreground transition-colors hover:text-royal-gold-400"
+                    >
+                      Logga ut
+                    </button>
                   ) : (
                     <Link
                       href="/login"
@@ -84,7 +76,7 @@ export default function Footer() {
                       Logga in
                     </Link>
                   )}
-                </div>
+                </>
               )}
             </nav>
           </div>
@@ -105,7 +97,7 @@ export default function Footer() {
             <div className="flex flex-col gap-3 text-base">
               <a
                 href="mailto:dick@disk.su.se"
-                className="lettering text-xs hover:underline md:text-sm"
+                className="lettering hover:underline"
               >
                 dick@disk.su.se
               </a>
@@ -132,7 +124,7 @@ export default function Footer() {
       </div>
 
       <div>
-        <div className="mx-auto flex max-w-5xl items-center justify-between gap-5 border-t border-foreground/30 px-4 py-4">
+        <div className="mx-auto flex max-w-5xl flex-col items-center justify-between gap-5 border-t border-foreground/30 px-4 py-4 md:flex-row">
           <div className="flex items-center gap-5">
             <a
               href="https://dick.fredriketsare.se"
@@ -142,9 +134,9 @@ export default function Footer() {
               <Image
                 src="/logos/logs.jpg"
                 alt="DICK logo"
-                width={100}
-                height={100}
-                className="h-12 w-12 object-contain"
+                width={120}
+                height={120}
+                className="h-16 w-12 object-contain"
               />
             </a>
 
@@ -154,7 +146,7 @@ export default function Footer() {
                 alt="DISK logo"
                 width={120}
                 height={120}
-                className="h-12 w-auto object-contain"
+                className="h-16 w-auto object-contain"
               />
             </a>
 
@@ -163,11 +155,11 @@ export default function Footer() {
               alt="SK logo"
               width={120}
               height={120}
-              className="h-12 w-auto object-contain"
+              className="h-16 w-auto object-contain"
             />
           </div>
 
-          <div className="flex flex-col items-end gap-1 text-xs md:text-sm">
+          <div className="flex flex-col items-center gap-1 text-xs md:items-end md:text-sm">
             <a
               href="https://github.com/fetsare/dick.disk.su.se"
               target="_blank"

@@ -1,122 +1,73 @@
 @import "tailwindcss";
-@import "tw-animate-css";
-@import "shadcn/tailwind.css";
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
 
-  /* MinionPro font variables provided by next/font/local in app/fonts.ts */
   --font-minion-regular: var(--font-minion-regular);
   --font-minion-bold: var(--font-minion-bold);
   --font-minion-italic: var(--font-minion-italic);
   --font-minion-bold-italic: var(--font-minion-bold-italic);
 
-  --font-heading: var(--font-sans);
-  --font-sans: var(--font-sans);
-  --color-sidebar-ring: var(--sidebar-ring);
-  --color-sidebar-border: var(--sidebar-border);
-  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-  --color-sidebar-accent: var(--sidebar-accent);
-  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-  --color-sidebar-primary: var(--sidebar-primary);
-  --color-sidebar-foreground: var(--sidebar-foreground);
-  --color-sidebar: var(--sidebar);
-  --color-chart-5: var(--chart-5);
-  --color-chart-4: var(--chart-4);
-  --color-chart-3: var(--chart-3);
-  --color-chart-2: var(--chart-2);
-  --color-chart-1: var(--chart-1);
-  --color-ring: var(--ring);
-  --color-input: var(--input);
-  --color-border: var(--border);
-  --color-destructive: var(--destructive);
-  --color-accent-foreground: var(--accent-foreground);
-  --color-accent: var(--accent);
-  --color-muted-foreground: var(--muted-foreground);
-  --color-muted: var(--muted);
-  --color-secondary-foreground: var(--secondary-foreground);
-  --color-secondary: var(--secondary);
-  --color-primary-foreground: var(--primary-foreground);
-  --color-primary: var(--primary);
-  --color-popover-foreground: var(--popover-foreground);
-  --color-popover: var(--popover);
-  --color-card-foreground: var(--card-foreground);
-  --color-card: var(--card);
-  --radius-sm: calc(var(--radius) * 0.6);
-  --radius-md: calc(var(--radius) * 0.8);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) * 1.4);
-  --radius-2xl: calc(var(--radius) * 1.8);
-  --radius-3xl: calc(var(--radius) * 2.2);
-  --radius-4xl: calc(var(--radius) * 2.6);
-}
+  --color-spruce-50: #f2f6ee;
+  --color-spruce-100: #e5eedd;
+  --color-spruce-200: #cbdcbc;
+  --color-spruce-300: #b1cb9a;
+  --color-spruce-400: #97ba78;
+  --color-spruce-500: #7da857;
+  --color-spruce-600: #648745;
+  --color-spruce-700: #4b6534;
+  --color-spruce-800: #324323;
+  --color-spruce-900: #192211;
+  --color-spruce-950: #11180c;
 
-:root {
-  /* Overall background and text: dark red base, slightly desaturated and less bright */
-  --background: oklch(0.3 0.08 30); /* deep muted red */
-  --foreground: oklch(0.92 0.03 95); /* soft warm light for text */
+  --color-vanilla-custard-50: #fffbe5;
+  --color-vanilla-custard-100: #fff7cc;
+  --color-vanilla-custard-200: #fff099;
+  --color-vanilla-custard-300: #ffe866;
+  --color-vanilla-custard-400: #ffe033;
+  --color-vanilla-custard-500: #ffd900;
+  --color-vanilla-custard-600: #ccad00;
+  --color-vanilla-custard-700: #998200;
+  --color-vanilla-custard-800: #665700;
+  --color-vanilla-custard-900: #332b00;
+  --color-vanilla-custard-950: #241e00;
 
-  /* Cards and popovers sit slightly above the background but in same family */
-  --card: oklch(0.32 0.08 30);
-  --card-foreground: var(--foreground);
-  --popover: oklch(0.33 0.08 30);
-  --popover-foreground: var(--foreground);
+  --color-royal-gold-50: #fff8e6;
+  --color-royal-gold-100: #fef1cd;
+  --color-royal-gold-200: #fde39b;
+  --color-royal-gold-300: #fdd568;
+  --color-royal-gold-400: #fcc736;
+  --color-royal-gold-500: #fbb904;
+  --color-royal-gold-600: #c99403;
+  --color-royal-gold-700: #976f02;
+  --color-royal-gold-800: #644a02;
+  --color-royal-gold-900: #322501;
+  --color-royal-gold-950: #231a01;
 
-  /* Main accent color: dark red */
-  --primary: oklch(0.4 0.12 30);
-  --primary-foreground: oklch(0.96 0.03 95);
+  --color-tomato-jam-50: #f9edeb;
+  --color-tomato-jam-100: #f3dad8;
+  --color-tomato-jam-200: #e8b5b0;
+  --color-tomato-jam-300: #dc9089;
+  --color-tomato-jam-400: #d06b62;
+  --color-tomato-jam-500: #c4463b;
+  --color-tomato-jam-600: #9d382f;
+  --color-tomato-jam-700: #762a23;
+  --color-tomato-jam-800: #4f1c17;
+  --color-tomato-jam-900: #270e0c;
+  --color-tomato-jam-950: #1b0a08;
 
-  /* Secondary / subtle surfaces: slightly darker red */
-  --secondary: oklch(0.26 0.06 30);
-  --secondary-foreground: var(--foreground);
-
-  /* Muted text and surfaces */
-  --muted: oklch(0.25 0.04 30);
-  --muted-foreground: oklch(0.78 0.03 95);
-
-  /* Accent for titles: dark yellow (golden), kept fairly muted */
-  --accent: oklch(0.7 0.13 95); /* dark yellow/gold */
-  --accent-foreground: oklch(0.18 0.04 40);
-
-  /* Destructive: deep, slightly brighter red */
-  --destructive: oklch(0.45 0.15 25);
-
-  /* Borders / inputs / rings: low-contrast, less bright */
-  --border: oklch(0.28 0.03 30);
-  --input: oklch(0.28 0.03 30);
-  --ring: oklch(0.7 0.12 95);
-
-  /* Charts stay within same palette */
-  --chart-1: oklch(0.4 0.12 30);
-  --chart-2: oklch(0.32 0.08 30);
-  --chart-3: oklch(0.26 0.06 30);
-  --chart-4: oklch(0.7 0.13 95);
-  --chart-5: oklch(0.78 0.03 95);
-
-  --radius: 0.625rem;
-
-  /* Sidebar matches the main theme */
-  --sidebar: oklch(0.3 0.08 30);
-  --sidebar-foreground: var(--foreground);
-  --sidebar-primary: var(--primary);
-  --sidebar-primary-foreground: var(--primary-foreground);
-  --sidebar-accent: var(--accent);
-  --sidebar-accent-foreground: var(--accent-foreground);
-  --sidebar-border: var(--border);
-  --sidebar-ring: var(--ring);
-}
-
-@layer base {
-  * {
-    @apply border-border outline-ring/50;
-  }
-  body {
-    @apply bg-background text-foreground;
-  }
-  html {
-    @apply font-sans;
-  }
+  --color-fern-50: #f2f7ee;
+  --color-fern-100: #e4eedd;
+  --color-fern-200: #c9deba;
+  --color-fern-300: #aecd98;
+  --color-fern-400: #93bd75;
+  --color-fern-500: #78ac53;
+  --color-fern-600: #608a42;
+  --color-fern-700: #486732;
+  --color-fern-800: #304521;
+  --color-fern-900: #182211;
+  --color-fern-950: #11180c;
 }
 
 body {
@@ -141,4 +92,23 @@ body {
 .minion-bold-italic {
   font-family: var(--font-minion-bold-italic), serif;
   font-style: italic;
+}
+
+.lettering {
+  font-family: var(--font-minion-bold), serif;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+}
+
+.lettering-reduced {
+  font-family: var(--font-minion-bold), serif;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+:root {
+  --background: var(--color-red-950);
+  --foreground: oklch(0.92 0.03 95);
+
+  --radius: 0.625rem;
 }

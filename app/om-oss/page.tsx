@@ -1,5 +1,5 @@
-import { PageTitle } from "@/components/PageTitle";
 import Image from "next/image";
+import { PageTitle } from "@/components/PageTitle";
 
 export default function Members() {
   return (
@@ -15,9 +15,7 @@ export default function Members() {
       </div>
 
       <div className="flex flex-col items-center w-full px-4 py-8 md:py-10">
-        <PageTitle>
-          Medlemmar
-        </PageTitle>
+        <PageTitle>Om oss</PageTitle>
       </div>
     </main>
   );

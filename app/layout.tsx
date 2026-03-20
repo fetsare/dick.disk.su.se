@@ -8,11 +8,7 @@ import {
 import Navbar from "@/components/Navbar";
 
 import "./globals.css";
-import { Geist } from "next/font/google";
-import { cn } from "@/lib/utils";
 import Footer from "@/components/Footer";
-
-const geist = Geist({ subsets: ["latin"], variable: "--font-sans" });
 
 export const metadata: Metadata = {
   title: "DICK - DISKs Interna Catan Klub",
@@ -26,26 +22,19 @@ export default function RootLayout({
 }>) {
   return (
     <html
-      lang="en"
-      className={cn(
-        "h-full",
-        "antialiased",
-        minionProRegular.variable,
-        minionProItalic.variable,
-        minionProBold.variable,
-        minionProBoldItalic.variable,
-        "font-sans",
-        geist.variable,
-      )}
+      lang="sv"
+      className={`
+  ${minionProRegular.variable}
+  ${minionProItalic.variable}
+  ${minionProBold.variable}
+  ${minionProBoldItalic.variable}
+  font-minion-regular
+  `}
     >
-      <body className="min-h-screen w-screen text-foreground">
-        <div className="flex min-h-screen flex-col">
+      <body>
+        <div className="flex min-h-screen flex-col w-screen text-foreground">
           <Navbar />
-
-        <main className="flex flex-1">
-            {children}
-          </main>
-
+          <main className="flex-1">{children}</main>
           <Footer />
         </div>
       </body>

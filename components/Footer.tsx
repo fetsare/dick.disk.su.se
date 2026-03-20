@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import Image from "next/image";
 import Link from "next/link";
 import { NAVIGATION_ITEMS } from "./Navbar";
@@ -15,7 +15,7 @@ export default function Footer() {
       <div className="mx-auto flex max-w-5xl flex-col items-center gap-8 px-4 py-10">
         <div className="grid w-full gap-8 md:grid-cols-[1fr_auto_1fr] md:items-start md:justify-center">
           <div className="space-y-4">
-            <h2 className="minion-bold text-base uppercase tracking-wide text-accent">
+            <h2 className="lettering text-base text-royal-gold-400">
               Genvägar
             </h2>
             <nav className="flex flex-col gap-3 text-base">
@@ -23,7 +23,7 @@ export default function Footer() {
                 <Link
                   key={item.link}
                   href={item.link}
-                  className="minion-bold text-foreground transition-colors hover:text-accent"
+                  className="lettering text-foreground transition-colors hover:text-royal-gold-400"
                 >
                   {item.label}
                 </Link>
@@ -31,24 +31,30 @@ export default function Footer() {
             </nav>
           </div>
 
-          <div className="hidden items-center justify-center sm:flex">
-            <p className="minion-bold text-center text-xs uppercase tracking-[0.15em] text-foreground md:text-sm lg:text-base">
+          <div className="hidden flex-col justify-center gap-1 sm:flex">
+            <p className="lettering text-center text-xs text-royal-gold-400 md:text-sm lg:text-base">
               Lignum habes?
             </p>
           </div>
 
           <div className="space-y-4 text-left sm:text-right">
-            <h2 className="minion-bold text-base uppercase tracking-wide text-accent">
+            <h2 className="lettering text-base text-royal-gold-400">
               Sociala medier
             </h2>
             <div className="flex flex-col gap-3 text-base">
+              <a
+                href="mailto:dick@disk.su.se"
+                className="lettering text-xs hover:underline md:text-sm"
+              >
+                dick@disk.su.se
+              </a>
               {SOCIAL_LINKS.map((social) => (
                 <Link
                   key={social.label}
                   href={social.href}
                   target="_blank"
                   rel="noreferrer"
-                  className="minion-bold text-foreground transition-colors hover:text-accent"
+                  className="lettering text-foreground transition-colors hover:text-royal-gold-400"
                 >
                   {social.label}
                 </Link>
@@ -60,7 +66,11 @@ export default function Footer() {
 
       <div>
         <div className="mx-auto flex max-w-5xl items-center justify-start gap-5 border-t border-foreground/30 px-4 py-4">
-          <a href="https://dick.fredriketsare.se" target="_blank" rel="noreferrer">
+          <a
+            href="https://dick.fredriketsare.se"
+            target="_blank"
+            rel="noreferrer"
+          >
             <Image
               src="/logos/logs.jpg"
               alt="DICK logo"

@@ -1,8 +1,9 @@
+import { PageTitle } from "@/components/PageTitle";
 import Image from "next/image";
 
 export default function Home() {
   return (
-    <main className="relative min-h-screen w-full overflow-hidden">
+    <main className="relative w-full overflow-hidden">
       <div className="pointer-events-none fixed inset-0 -z-10">
         <Image
           src="/catan.jpg"
@@ -13,12 +14,10 @@ export default function Home() {
         />
       </div>
 
-      <div className="mx-auto flex max-w-4xl flex-col gap-8 px-4 pb-16 pt-8">
-        <section>
-          <h1 className="minion-bold mb-4 text-3xl md:text-4xl">
-            DICK
-          </h1>
-          <h2 className="text-1xl md:text-2xl">DISKs Interna Catan Klub</h2>
+      <div className="mx-auto flex max-w-4xl flex-col gap-6 px-4 pb-16 pt-10">
+        <section className="text-center">
+          <PageTitle>DICK</PageTitle>
+          <h2 className="text-lg md:text-2xl">DISKs Interna Catan Klub</h2>
         </section>
       </div>
     </main>

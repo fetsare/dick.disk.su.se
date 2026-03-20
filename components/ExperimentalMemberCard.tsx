@@ -1,4 +1,4 @@
-"use client";
+'use client';
 import { formatMembershipDuration } from '@/lib/format-membership-duration';
 import type { User } from '@/lib/types';
 
@@ -21,26 +21,26 @@ export function ExperimentalMemberCard({ member, color = 'purple' }: Experimenta
         : 'bg-linear-to-b from-[#8f6ff0] to-[#6b4ea2]';
 
   return (
-    <div className="flex flex-col items-center gap-1">
-      <div className="relative flex flex-col overflow-hidden h-72 w-48 rounded-2xl bg-[#d8c29a] p-1 shadow-[0_4px_8px_rgba(0,0,0,0.35)] border-8 border-[#d8c29a] text-black font-serif">
+    <div className="flex flex-col items-center gap-2 mb-1.5">
+      <div className="relative flex flex-col overflow-hidden h-80 w-48 rounded-2xl bg-[#d8c29a] p-1 shadow-[0_4px_8px_rgba(0,0,0,0.35)] border-8 border-[#d8c29a] text-black font-serif">
         <div
           className={`${titleGradientClass} px-3 py-1.5 text-center text-xs font-semibold tracking-[0.14em] text-black uppercase shadow-[0_2px_3px_rgba(0,0,0,0.4)]`}
         >
           {member.name}
         </div>
 
-        <div className="relative flex-1 bg-[#c6ddf5]">
+        <div className="relative bg-[#c6ddf5] h-96 overflow-hidden">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src={member.profile_image_url || "/sheep.jpg"}
+            src={member.profile_image_url || '/sheep.jpg'}
             alt={member.name}
             className="h-full w-full object-cover"
           />
         </div>
 
-        <div className="border-t border-[#b69a6d] bg-[#f5e7c7] px-4 py-2 text-center text-[11px] leading-snug text-[#3b2c1c]">
+        <div className="border-t border-[#b69a6d] bg-[#f5e7c7] px-4 h-full text-center text-[11px] leading-snug text-[#3b2c1c] flex items-center justify-center">
           {member.description && (
-            <div className="text-[15px] text-black font-minion-italic">
+            <div className="text-[15px] text-black font-minion-italic max-h-full overflow-hidden text-ellipsis">
               {member.description}
             </div>
           )}

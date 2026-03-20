@@ -1,5 +1,4 @@
-'use client';
-import Image from 'next/image';
+"use client";
 import { formatMembershipDuration } from '@/lib/format-membership-duration';
 import type { User } from '@/lib/types';
 
@@ -31,12 +30,11 @@ export function ExperimentalMemberCard({ member, color = 'purple' }: Experimenta
         </div>
 
         <div className="relative flex-1 bg-[#c6ddf5]">
-          <Image
-            src={member.profile_image_url || '/sheep.jpg'}
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={member.profile_image_url || "/sheep.jpg"}
             alt={member.name}
-            fill
-            sizes="192px"
-            className="object-cover"
+            className="h-full w-full object-cover"
           />
         </div>
 

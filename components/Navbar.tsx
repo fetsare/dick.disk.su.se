@@ -2,9 +2,10 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Menu, X } from "lucide-react";
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { useAuth } from "@/lib/auth-context";
+import { serverLogout } from "@/app/logout/actions";
 
 export interface NavbarItem {
   label: string;
@@ -32,6 +33,7 @@ export const NAVIGATION_ITEMS: NavbarItem[] = [
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
+  const [, startTransition] = useTransition();
   const pathname = usePathname();
   const router = useRouter();
   const { user, loading, logout } = useAuth();
@@ -89,8 +91,12 @@ export default function Navbar() {
                 <button
                   type="button"
                   onClick={() => {
-                    logout();
-                    router.push("/");
+                    // Clear client auth state and server session cookie
+                    startTransition(async () => {
+                      await serverLogout();
+                      logout();
+                      router.push("/");
+                    });
                   }}
                   className="minion-bold inline-flex items-center text-xs uppercase tracking-[0.2em] text-foreground hover:text-royal-gold-400 md:text-sm"
                 >
@@ -150,9 +156,12 @@ export default function Navbar() {
                   <button
                     type="button"
                     onClick={() => {
-                      logout();
-                      closeMenu();
-                      router.push("/");
+                      startTransition(async () => {
+                        await serverLogout();
+                        logout();
+                        closeMenu();
+                        router.push("/");
+                      });
                     }}
                     className="minion-bold flex items-center py-2 text-sm uppercase tracking-[0.18em] text-foreground hover:text-royal-gold-400"
                   >

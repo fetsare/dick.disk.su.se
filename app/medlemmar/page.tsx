@@ -6,6 +6,8 @@ type Member = {
   name: string;
 };
 
+export const revalidate = 60;
+
 async function getMembers(): Promise<Member[]> {
   const databaseUrl = process.env.DATABASE_URL;
   if (!databaseUrl) {

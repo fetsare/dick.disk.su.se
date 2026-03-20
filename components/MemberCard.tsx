@@ -9,6 +9,7 @@ export type MemberCardProps = {
   profileImageUrl?: string | null;
   createdAt?: string;
   size?: MemberCardSize;
+  description?: string | null;
 };
 
 const sizeStyles: Record<
@@ -36,7 +37,7 @@ const sizeStyles: Record<
   },
 };
 
-export function MemberCard({ name, profileImageUrl, createdAt, size = 'md' }: MemberCardProps) {
+export function MemberCard({ name, profileImageUrl, createdAt, size = 'md', description }: MemberCardProps) {
   const styles = sizeStyles[size];
   const src = profileImageUrl || '/sheep.jpg';
   const membershipDuration = formatMembershipDuration(createdAt ?? null);
@@ -44,7 +45,7 @@ export function MemberCard({ name, profileImageUrl, createdAt, size = 'md' }: Me
   return (
     <div
       className={`
-        flex flex-col items-center rounded-2xl border backdrop-blur-xl
+        flex flex-col items-center rounded-2xl border bg-red-900 backdrop-blur-xl
         ${styles.container}
       `}
     >
@@ -73,7 +74,12 @@ export function MemberCard({ name, profileImageUrl, createdAt, size = 'md' }: Me
           {name}
         </h3>
         {membershipDuration && (
-          <p className="mt-1 text-sm text-foreground/80">Medlem i {membershipDuration}</p>
+          <p className="mt-1 text-sm text-white">Medlem i {membershipDuration}</p>
+        )}
+        {description && (
+          <p className="mt-1 text-xs text-white/80 max-w-48 whitespace-pre-line">
+            {description}
+          </p>
         )}
       </div>
     </div>

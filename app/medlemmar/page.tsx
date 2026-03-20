@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { PageTitle } from '@/components/PageTitle';
 import { neon } from '@neondatabase/serverless';
-import { MemberCard } from '@/components/MemberCard';
+import { ExperimentalMemberCard } from '@/components/ExperimentalMemberCard';
 import { pagesMetadata } from '../metadata';
 
 export const metadata: Metadata = pagesMetadata.members;
@@ -11,9 +11,10 @@ type Member = {
   name: string;
   profile_image_url?: string | null;
   created_at: string;
+  description?: string | null;
 };
 
-export const revalidate = 86400;
+export const revalidate = 60;
 
 async function getMembers(): Promise<Member[]> {
   const databaseUrl = process.env.DATABASE_URL;
@@ -24,7 +25,7 @@ async function getMembers(): Promise<Member[]> {
   const sql = neon(databaseUrl);
 
   const rows = await sql`
-  SELECT id, name, role, profile_image_url, created_at
+  SELECT id, name, role, profile_image_url, created_at, description
     FROM users
     WHERE is_active = TRUE
     ORDER BY name ASC
@@ -54,11 +55,27 @@ export default async function Members() {
         >
           {members.map((member) => (
             <div key={member.id} className="flex justify-center">
-              <MemberCard
+              {/* Existing member card */}
+              {/* <MemberCard
                 name={member.name}
                 profileImageUrl={member.profile_image_url}
                 createdAt={member.created_at}
                 size="md"
+              /> */}
+
+              {/* Experimental Catan-style member card */}
+              <ExperimentalMemberCard
+                member={{
+                  id: member.id,
+                  email: '',
+                  name: member.name,
+                  role: 'member',
+                  created_at: member.created_at,
+                  is_active: true,
+                  profile_image_url: member.profile_image_url ?? undefined,
+                  description: member.description ?? null,
+                  membershipStartDate: member.created_at,
+                }}
               />
             </div>
           ))}

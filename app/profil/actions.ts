@@ -19,6 +19,7 @@ export async function updateProfile(formData: FormData) {
   const currentPassword = formData.get('currentPassword');
   const newPassword = formData.get('newPassword');
   const confirmPassword = formData.get('confirmPassword');
+  const description = formData.get('description');
 
   if (typeof name !== 'string' || typeof email !== 'string') {
     return { error: 'Ogiltiga formulärvärden.' };
@@ -26,6 +27,10 @@ export async function updateProfile(formData: FormData) {
 
   const trimmedName = name.trim();
   const trimmedEmail = email.trim();
+  const trimmedDescription =
+    typeof description === 'string' && description.trim().length > 0
+      ? description.trim()
+      : null;
 
   if (!trimmedName || !trimmedEmail) {
     return { error: 'Namn och e‑post får inte vara tomma.' };
@@ -92,13 +97,13 @@ export async function updateProfile(formData: FormData) {
   if (updatePassword && passwordHash) {
     await sql`
       UPDATE users
-  SET name = ${trimmedName}, email = ${trimmedEmail}, password_hash = ${passwordHash}, updated_at = NOW()
+  SET name = ${trimmedName}, email = ${trimmedEmail}, description = ${trimmedDescription}, password_hash = ${passwordHash}, updated_at = NOW()
       WHERE id = ${user.id}
     `;
   } else {
     await sql`
       UPDATE users
-  SET name = ${trimmedName}, email = ${trimmedEmail}, updated_at = NOW()
+  SET name = ${trimmedName}, email = ${trimmedEmail}, description = ${trimmedDescription}, updated_at = NOW()
       WHERE id = ${user.id}
     `;
   }
@@ -145,16 +150,16 @@ export async function uploadProfileImage(formData: FormData) {
 
   const sql = neon(databaseUrl);
 
+  const versionedUrl = `${blob.url}?v=${Date.now()}`;
+
   await sql`
     UPDATE users
-    SET profile_image_url = ${blob.url}, updated_at = NOW()
+    SET profile_image_url = ${versionedUrl}, updated_at = NOW()
     WHERE id = ${user.id}
   `;
 
   revalidatePath('/profil');
   revalidatePath('/medlemmar');
-
-  const versionedUrl = `${blob.url}?v=${Date.now()}`;
 
   return { success: true as const, url: versionedUrl };
 }

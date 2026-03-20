@@ -9,6 +9,7 @@ export type UserDb = {
   created_at: Date | string;
   is_active: boolean;
   profile_image_url?: string | null;
+  description?: string | null;
 };
 
 export type User = Omit<UserDb, 'password_hash'>;

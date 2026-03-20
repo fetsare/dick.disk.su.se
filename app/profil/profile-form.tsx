@@ -11,9 +11,10 @@ type ProfileFormProps = {
   email: string;
   role: 'admin' | 'member';
   profileImageUrl?: string | null;
+  description?: string | null;
 };
 
-export function ProfileForm({ name, email, role, profileImageUrl }: ProfileFormProps) {
+export function ProfileForm({ name, email, role, profileImageUrl, description }: ProfileFormProps) {
   const [state, formAction, pending] = useActionState(
     async (_prevState: { error: string | null; success: boolean }, formData: FormData) => {
       const result = await updateProfile(formData);
@@ -46,6 +47,14 @@ export function ProfileForm({ name, email, role, profileImageUrl }: ProfileFormP
         <form action={formAction} className="space-y-4 text-sm">
           <FormField id="name" label="Namn" defaultValue={name} />
           <FormField id="email" label="E‑post" type="email" defaultValue={email} />
+
+          <FormField
+            id="description"
+            label="Beskrivning"
+            as="textarea"
+            rows={3}
+            defaultValue={description ?? ''}
+          />
 
           <div>
             <dt className="font-semibold">Roll</dt>

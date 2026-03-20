@@ -38,11 +38,11 @@ export default function RootLayout({
         geist.variable,
       )}
     >
-      <body className="min-h-screen w-screen bg-background text-foreground">
+      <body className="min-h-screen w-screen text-foreground">
         <div className="flex min-h-screen flex-col">
           <Navbar />
 
-          <main className="flex flex-1">
+        <main className="flex flex-1">
             {children}
           </main>
 

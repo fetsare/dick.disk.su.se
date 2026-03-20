@@ -1,3 +1,4 @@
+"use client"
 import Image from "next/image";
 import Link from "next/link";
 import { NAVIGATION_ITEMS } from "./Navbar";
@@ -10,7 +11,7 @@ const SOCIAL_LINKS = [
 
 export default function Footer() {
   return (
-    <footer className="w-full text-foreground">
+    <footer className="w-full bg-background text-foreground">
       <div className="mx-auto flex max-w-5xl flex-col items-center gap-8 px-4 py-10">
         <div className="grid w-full gap-8 md:grid-cols-[1fr_auto_1fr] md:items-start md:justify-center">
           <div className="space-y-4">
@@ -22,7 +23,7 @@ export default function Footer() {
                 <Link
                   key={item.link}
                   href={item.link}
-                  className="minion-bold text-foreground/85 transition-colors hover:text-accent"
+                  className="minion-bold text-foreground transition-colors hover:text-accent"
                 >
                   {item.label}
                 </Link>
@@ -31,7 +32,7 @@ export default function Footer() {
           </div>
 
           <div className="hidden items-center justify-center sm:flex">
-            <p className="minion-bold text-center text-xs uppercase tracking-[0.15em] text-foreground/80 md:text-sm lg:text-base">
+            <p className="minion-bold text-center text-xs uppercase tracking-[0.15em] text-foreground md:text-sm lg:text-base">
               Lignum habes?
             </p>
           </div>
@@ -47,7 +48,7 @@ export default function Footer() {
                   href={social.href}
                   target="_blank"
                   rel="noreferrer"
-                  className="minion-bold text-foreground/85 transition-colors hover:text-accent"
+                  className="minion-bold text-foreground transition-colors hover:text-accent"
                 >
                   {social.label}
                 </Link>
@@ -57,8 +58,8 @@ export default function Footer() {
         </div>
       </div>
 
-      <div className="bg-background/90">
-        <div className="mx-auto flex max-w-5xl items-center justify-start gap-5 border-t border-foreground/15 px-4 py-4">
+      <div>
+        <div className="mx-auto flex max-w-5xl items-center justify-start gap-5 border-t border-foreground/30 px-4 py-4">
           <a href="https://dick.fredriketsare.se" target="_blank" rel="noreferrer">
             <Image
               src="/logos/logs.jpg"

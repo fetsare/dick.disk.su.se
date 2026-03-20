@@ -4,7 +4,6 @@ import { neon } from '@neondatabase/serverless';
 import { ExperimentalMemberCard } from '@/components/ExperimentalMemberCard';
 import { pagesMetadata } from '../metadata';
 
-export const dynamic = 'force-dynamic';
 export const metadata: Metadata = pagesMetadata.members;
 
 type Member = {

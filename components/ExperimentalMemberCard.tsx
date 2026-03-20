@@ -1,4 +1,5 @@
 'use client';
+import Link from 'next/link';
 import { formatMembershipDuration } from '@/lib/format-membership-duration';
 import type { User } from '@/lib/types';
 
@@ -12,6 +13,15 @@ interface ExperimentalMemberCardProps {
 // A Catan-style experimental member card.
 export function ExperimentalMemberCard({ member, color = 'purple' }: ExperimentalMemberCardProps) {
   const memberLength = formatMembershipDuration(member.membershipStartDate);
+
+  const profileImageSrc = (typeof member.profile_image_url === 'string' && member.profile_image_url) || '/sheep.jpg';
+  const cacheKey =
+    typeof member.membershipStartDate === 'string'
+      ? member.membershipStartDate
+      : member.membershipStartDate?.toISOString?.() || '';
+  const cacheBustedProfileImageSrc = cacheKey
+    ? `${profileImageSrc}?v=${encodeURIComponent(cacheKey)}`
+    : profileImageSrc;
 
   const titleGradientClass =
     color === 'green'
@@ -30,12 +40,28 @@ export function ExperimentalMemberCard({ member, color = 'purple' }: Experimenta
         </div>
 
         <div className="relative bg-[#c6ddf5] h-96 overflow-hidden">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={member.profile_image_url || '/sheep.jpg'}
-            alt={member.name}
-            className="h-full w-full object-cover"
-          />
+          {member.colonist_link ? (
+            <Link
+              href={member.colonist_link}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="block h-full w-full"
+            >
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={cacheBustedProfileImageSrc}
+                alt={member.name}
+                className="h-full w-full object-cover"
+              />
+            </Link>
+          ) : (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src={cacheBustedProfileImageSrc}
+              alt={member.name}
+              className="h-full w-full object-cover"
+            />
+          )}
         </div>
 
         <div className="border-t border-[#b69a6d] bg-[#f5e7c7] px-4 h-full text-center text-[11px] leading-snug text-[#3b2c1c] flex items-center justify-center">
@@ -51,7 +77,7 @@ export function ExperimentalMemberCard({ member, color = 'purple' }: Experimenta
         {memberLength}
       </div>
       {member.colonist_link && (
-        <a
+        <Link
           href={member.colonist_link}
           target="_blank"
           rel="noopener noreferrer"
@@ -63,7 +89,7 @@ export function ExperimentalMemberCard({ member, color = 'purple' }: Experimenta
             alt="Colonist"
             className="h-full w-full object-contain drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]"
           />
-        </a>
+        </Link>
       )}
     </div>
   );

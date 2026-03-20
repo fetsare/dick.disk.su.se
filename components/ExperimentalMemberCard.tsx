@@ -40,28 +40,12 @@ export function ExperimentalMemberCard({ member, color = 'purple' }: Experimenta
         </div>
 
         <div className="relative bg-[#c6ddf5] h-96 overflow-hidden">
-          {member.colonist_link ? (
-            <Link
-              href={member.colonist_link}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="block h-full w-full"
-            >
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={cacheBustedProfileImageSrc}
-                alt={member.name}
-                className="h-full w-full object-cover"
-              />
-            </Link>
-          ) : (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img
-              src={cacheBustedProfileImageSrc}
-              alt={member.name}
-              className="h-full w-full object-cover"
-            />
-          )}
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={cacheBustedProfileImageSrc}
+            alt={member.name}
+            className="h-full w-full object-cover"
+          />
         </div>
 
         <div className="border-t border-[#b69a6d] bg-[#f5e7c7] px-4 h-full text-center text-[11px] leading-snug text-[#3b2c1c] flex items-center justify-center">

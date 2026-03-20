@@ -47,9 +47,9 @@ export default async function Members() {
             max-w-6xl
             grid
             gap-4
-            grid-cols-[repeat(auto-fit,minmax(160px,1fr))]
-            sm:grid-cols-[repeat(auto-fit,minmax(180px,1fr))]
-            md:grid-cols-[repeat(auto-fit,minmax(200px,1fr))]
+            grid-cols-[repeat(auto-fit,minmax(190px,1fr))]
+            sm:grid-cols-[repeat(auto-fit,minmax(210px,1fr))]
+            md:grid-cols-[repeat(auto-fit,minmax(230px,1fr))]
           "
         >
           {members.map((member) => (

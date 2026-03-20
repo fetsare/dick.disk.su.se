@@ -13,6 +13,7 @@ type Member = {
   profile_image_url?: string | null;
   created_at: string;
   description?: string | null;
+  colonist_link?: string | null;
 };
 
 async function getMembers(): Promise<Member[]> {
@@ -24,7 +25,7 @@ async function getMembers(): Promise<Member[]> {
   const sql = neon(databaseUrl);
 
   const rows = await sql`
-  SELECT id, name, role, profile_image_url, created_at, description
+  SELECT id, name, role, profile_image_url, created_at, description, colonist_link
     FROM users
     WHERE is_active = TRUE
     ORDER BY name ASC
@@ -73,6 +74,7 @@ export default async function Members() {
                   is_active: true,
                   profile_image_url: member.profile_image_url ?? undefined,
                   description: member.description ?? null,
+                  colonist_link: member.colonist_link ?? null,
                   membershipStartDate: member.created_at,
                 }}
               />

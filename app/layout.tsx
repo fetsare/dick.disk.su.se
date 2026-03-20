@@ -27,9 +27,9 @@ export default function RootLayout({
   font-minion-regular
   `}
     >
-      <body>
+      <body className="overflow-x-hidden">
         <AuthProvider>
-          <div className="flex min-h-screen flex-col w-screen text-foreground">
+          <div className="flex min-h-screen flex-col w-full max-w-[100vw] overflow-x-hidden text-foreground">
             <Navbar />
             <main className="flex-1 relative w-full overflow-hidden">
               <div className="pointer-events-none fixed inset-0 -z-10">

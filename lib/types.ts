@@ -10,6 +10,7 @@ export type UserDb = {
   is_active: boolean;
   profile_image_url?: string | null;
   description?: string | null;
+  colonist_link?: string | null;
 };
 
 export type User = Omit<UserDb, 'password_hash'>;

@@ -20,6 +20,7 @@ export async function updateProfile(formData: FormData) {
   const newPassword = formData.get('newPassword');
   const confirmPassword = formData.get('confirmPassword');
   const description = formData.get('description');
+  const colonistLink = formData.get('colonist_link');
 
   if (typeof name !== 'string' || typeof email !== 'string') {
     return { error: 'Ogiltiga formulärvärden.' };
@@ -30,6 +31,10 @@ export async function updateProfile(formData: FormData) {
   const trimmedDescription =
     typeof description === 'string' && description.trim().length > 0
       ? description.trim()
+      : null;
+  const trimmedColonistLink =
+    typeof colonistLink === 'string' && colonistLink.trim().length > 0
+      ? colonistLink.trim()
       : null;
 
   if (!trimmedName || !trimmedEmail) {
@@ -97,13 +102,13 @@ export async function updateProfile(formData: FormData) {
   if (updatePassword && passwordHash) {
     await sql`
       UPDATE users
-  SET name = ${trimmedName}, email = ${trimmedEmail}, description = ${trimmedDescription}, password_hash = ${passwordHash}, updated_at = NOW()
+  SET name = ${trimmedName}, email = ${trimmedEmail}, description = ${trimmedDescription}, colonist_link = ${trimmedColonistLink}, password_hash = ${passwordHash}, updated_at = NOW()
       WHERE id = ${user.id}
     `;
   } else {
     await sql`
       UPDATE users
-  SET name = ${trimmedName}, email = ${trimmedEmail}, description = ${trimmedDescription}, updated_at = NOW()
+  SET name = ${trimmedName}, email = ${trimmedEmail}, description = ${trimmedDescription}, colonist_link = ${trimmedColonistLink}, updated_at = NOW()
       WHERE id = ${user.id}
     `;
   }

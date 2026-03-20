@@ -21,8 +21,8 @@ export function ExperimentalMemberCard({ member, color = 'purple' }: Experimenta
         : 'bg-linear-to-b from-[#8f6ff0] to-[#6b4ea2]';
 
   return (
-    <div className="flex flex-col items-center gap-2 mb-1.5">
-      <div className="relative flex flex-col overflow-hidden h-80 w-48 rounded-2xl bg-[#d8c29a] p-1 shadow-[0_4px_8px_rgba(0,0,0,0.35)] border-8 border-[#d8c29a] text-black font-serif">
+    <div className="flex flex-col items-center gap-2 mb-1.5 relative">
+      <div className="flex flex-col overflow-hidden h-80 w-48 rounded-2xl bg-[#d8c29a] p-1 shadow-[0_4px_8px_rgba(0,0,0,0.35)] border-8 border-[#d8c29a] text-black font-serif">
         <div
           className={`${titleGradientClass} px-3 py-1.5 text-center text-xs font-semibold tracking-[0.14em] text-black uppercase shadow-[0_2px_3px_rgba(0,0,0,0.4)]`}
         >
@@ -50,6 +50,21 @@ export function ExperimentalMemberCard({ member, color = 'purple' }: Experimenta
       <div className="rounded-md bg-[#f5e7c7] px-3 py-1 text-[10px] text-[#3b2c1c] shadow-sm border border-[#b69a6d]">
         {memberLength}
       </div>
+      {member.colonist_link && (
+        <a
+          href={member.colonist_link}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="absolute -top-3 -right-3 h-10 w-10"
+        >
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/colonist.png"
+            alt="Colonist"
+            className="h-full w-full object-contain drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]"
+          />
+        </a>
+      )}
     </div>
   );
 }

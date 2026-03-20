@@ -13,8 +13,7 @@ type ProfileFormProps = {
   profileImageUrl?: string | null;
   description?: string | null;
 };
-
-export function ProfileForm({ name, email, role, profileImageUrl, description }: ProfileFormProps) {
+export function ProfileForm({ name, email, role, profileImageUrl, description, colonist_link }: ProfileFormProps & { colonist_link?: string | null }) {
   const [state, formAction, pending] = useActionState(
     async (_prevState: { error: string | null; success: boolean }, formData: FormData) => {
       const result = await updateProfile(formData);
@@ -54,6 +53,12 @@ export function ProfileForm({ name, email, role, profileImageUrl, description }:
             as="textarea"
             rows={3}
             defaultValue={description ?? ''}
+          />
+
+          <FormField
+            id="colonist_link"
+            label="Colonist.io-länk"
+            defaultValue={colonist_link ?? ''}
           />
 
           <div>

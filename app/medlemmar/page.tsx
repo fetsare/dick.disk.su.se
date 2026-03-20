@@ -1,6 +1,10 @@
+import type { Metadata } from "next";
 import { PageTitle } from "@/components/PageTitle";
 import { neon } from "@neondatabase/serverless";
 import { MemberCard } from "@/components/MemberCard";
+import { pagesMetadata } from "../metadata";
+
+export const metadata: Metadata = pagesMetadata.members;
 
 type Member = {
   id: string;

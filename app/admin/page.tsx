@@ -1,8 +1,12 @@
+import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { PageTitle } from "@/components/PageTitle";
 import { getPendingRequests } from "./actions";
 import { getCurrentUser } from "@/lib/session";
 import { AdminRequests } from "./requests-client";
+import { pagesMetadata } from "../metadata";
+
+export const metadata: Metadata = pagesMetadata.admin;
 
 export default async function Admin() {
   const user = await getCurrentUser();

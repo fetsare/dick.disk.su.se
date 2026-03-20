@@ -80,7 +80,10 @@ export default function Footer() {
           </div>
 
           <div className="hidden flex-col justify-center gap-1 sm:flex">
-            <Link href={lignumClicks === 2 ? "/admin" : "#"} onClick={handleLignumClick}>
+            <Link
+              href={lignumClicks === 2 ? "/admin" : "#"}
+              onClick={handleLignumClick}
+            >
               <p className="lettering text-center text-xs text-royal-gold-400 md:text-sm lg:text-base">
                 Lignum habes?
               </p>
@@ -88,9 +91,7 @@ export default function Footer() {
           </div>
 
           <div className="space-y-4 text-left sm:text-right">
-            <h2 className="lettering text-base text-royal-gold-400">
-              Sociala medier
-            </h2>
+            <h2 className="lettering text-base text-royal-gold-400">Kontakt</h2>
             <div className="flex flex-col gap-3 text-base">
               <a
                 href="mailto:dick@disk.su.se"
@@ -109,6 +110,12 @@ export default function Footer() {
                   {social.label}
                 </Link>
               ))}
+              <Link
+                className="lettering text-foreground transition-colors hover:text-royal-gold-400"
+                href="/vilkor"
+              >
+                Vilkor
+              </Link>
             </div>
           </div>
         </div>

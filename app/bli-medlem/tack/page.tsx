@@ -1,6 +1,10 @@
+import type { Metadata } from "next";
 import { PageTitle } from "@/components/PageTitle";
 import { Button } from "@/components/Button";
 import Link from "next/link";
+import { pagesMetadata } from "../../metadata";
+
+export const metadata: Metadata = pagesMetadata.becomeMemberThanks;
 
 export default function MembershipThankYou() {
   return (

@@ -12,11 +12,9 @@ import Footer from "@/components/Footer";
 import Image from "next/image";
 import { Toaster } from "sonner";
 import { AuthProvider } from "@/lib/auth-context";
+import { defaultMetadata } from "./metadata";
 
-export const metadata: Metadata = {
-  title: "DICK - DISKs Interna Catan Klub",
-  description: "DISKs Interna Catan Klub",
-};
+export const metadata: Metadata = defaultMetadata;
 
 export default function RootLayout({
   children,

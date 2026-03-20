@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { Button } from "@/components/Button";
 import { FormField } from "@/components/FormField";
 import { createMemberRequest } from "./actions";
@@ -43,9 +44,13 @@ export function BecomeMemberForm() {
       <Button type="submit" className="w-full mt-2 rounded-full text-lg">
         Skicka ansökan
       </Button>
-      <p className="text-md text-black">
-        Genom att klicka på Skicka ansökan godkänner du att vi sparar och
-        behandlar dina uppgifter i enlighet med GDPR.
+      <p className="text-md ">
+        Genom att klicka på Skicka Ansökan godkänner du våra
+        {" "}
+        <Link href="/vilkor" className="underline">
+          villkor
+        </Link>
+        .
       </p>
     </form>
   );

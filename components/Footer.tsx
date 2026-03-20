@@ -1,8 +1,11 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useTransition } from "react";
+import { useRouter } from "next/navigation";
 import { NAVIGATION_ITEMS } from "./Navbar";
+import { useAuth } from "@/lib/auth-context";
+import { serverLogout } from "@/app/logout/actions";
 
 const SOCIAL_LINKS = [
   { label: "Instagram", href: "https://www.instagram.com/studentkarendisk/" },
@@ -12,6 +15,9 @@ const SOCIAL_LINKS = [
 
 export default function Footer() {
   const [lignumClicks, setLignumClicks] = useState(0);
+  const [, startTransition] = useTransition();
+  const router = useRouter();
+  const { user, loading, logout } = useAuth();
 
   const handleLignumClick = () => {
     setLignumClicks((prev) => (prev + 1) % 3);
@@ -35,6 +41,41 @@ export default function Footer() {
                   {item.label}
                 </Link>
               ))}
+
+              {!loading && (
+                <div className="mt-2 flex flex-col gap-2">
+                  {user ? (
+                    <>
+                      <Link
+                        href="/profil"
+                        className="lettering text-foreground transition-colors hover:text-royal-gold-400"
+                      >
+                        Profil
+                      </Link>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          startTransition(async () => {
+                            await serverLogout();
+                            logout();
+                            router.push("/");
+                          });
+                        }}
+                        className="lettering text-left text-foreground transition-colors hover:text-royal-gold-400"
+                      >
+                        Logga ut
+                      </button>
+                    </>
+                  ) : (
+                    <Link
+                      href="/login"
+                      className="lettering text-foreground transition-colors hover:text-royal-gold-400"
+                    >
+                      Logga in
+                    </Link>
+                  )}
+                </div>
+              )}
             </nav>
           </div>
 

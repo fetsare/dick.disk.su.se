@@ -4,6 +4,7 @@ import { neon } from '@neondatabase/serverless';
 import { revalidatePath } from 'next/cache';
 import { getCurrentUser } from '@/lib/session';
 import { hashPassword } from '@/lib/hash-password';
+import { generateTempPassword } from '@/lib/generate-temp-password';
 
 export type MemberRequest = {
   id: string;
@@ -32,26 +33,6 @@ export async function getPendingRequests(): Promise<MemberRequest[]> {
   return rows as MemberRequest[];
 }
 
-function generateTempPassword(length = 12): string {
-  const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789!@#$%^&*';
-  let pwd = '';
-  const array = new Uint32Array(length);
-  if (typeof crypto !== 'undefined' && 'getRandomValues' in crypto) {
-    crypto.getRandomValues(array);
-    for (let i = 0; i < length; i++) {
-      pwd += chars[array[i] % chars.length];
-    }
-    return pwd;
-  }
-
-  // Fallback if crypto is not available in this environment
-  for (let i = 0; i < length; i++) {
-    const idx = Math.floor(Math.random() * chars.length);
-    pwd += chars[idx];
-  }
-  return pwd;
-}
-
 export async function approveRequest(id: string) {
   const admin = await getCurrentUser();
   if (!admin || admin.role !== 'admin') {
@@ -67,7 +48,7 @@ export async function approveRequest(id: string) {
 
   // Use a transaction to update the request and create a user
   await sql`BEGIN`;
-  const tempPassword = generateTempPassword();
+  const tempPassword = await generateTempPassword();
   const passwordHash = await hashPassword(tempPassword);
   let reqEmail = '';
   try {
@@ -109,6 +90,43 @@ export async function approveRequest(id: string) {
 
   revalidatePath('/admin');
   return { tempPassword, email: reqEmail };
+}
+
+export async function createMemberAccount(name: string, email: string) {
+  const admin = await getCurrentUser();
+  if (!admin || admin.role !== 'admin') {
+    throw new Error('Endast admin kan skapa konton.');
+  }
+
+  const databaseUrl = process.env.DATABASE_URL;
+  if (!databaseUrl) {
+    throw new Error('DATABASE_URL is not set');
+  }
+
+  const sql = neon(databaseUrl);
+
+  await sql`BEGIN`;
+  const tempPassword = await generateTempPassword();
+  const passwordHash = await hashPassword(tempPassword);
+
+  try {
+    await sql`
+      INSERT INTO users (email, name, role, is_active, password_hash)
+      VALUES (${email}, ${name}, 'member', TRUE, ${passwordHash})
+      ON CONFLICT (email) DO UPDATE SET
+        name = EXCLUDED.name,
+        is_active = TRUE,
+        password_hash = EXCLUDED.password_hash
+    `;
+
+    await sql`COMMIT`;
+  } catch (err) {
+    await sql`ROLLBACK`;
+    throw err;
+  }
+
+  revalidatePath('/admin');
+  return { tempPassword, email };
 }
 
 export async function rejectRequest(id: string) {

@@ -1,7 +1,7 @@
 'use client';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Menu, X } from 'lucide-react';
+import { ChevronDown, Menu, X } from 'lucide-react';
 import { useState, useTransition } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import { useAuth } from '@/lib/auth-context';
@@ -49,6 +49,7 @@ export const ADMIN_NAVIGATION_ITEMS: NavbarItem[] = [
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
+  const [isAdminOpen, setIsAdminOpen] = useState(false);
   const [, startTransition] = useTransition();
   const pathname = usePathname();
   const router = useRouter();
@@ -56,6 +57,12 @@ export default function Navbar() {
 
   const toggleMenu = () => setIsOpen((prev) => !prev);
   const closeMenu = () => setIsOpen(false);
+
+  const isOnAdminRoute = pathname?.startsWith('/admin');
+
+  const toggleAdmin = () => {
+    setIsAdminOpen((prev) => !prev);
+  };
 
   const navigationItems =
     user?.role === 'admin'
@@ -86,19 +93,70 @@ export default function Navbar() {
 
         {/* Desktop nav */}
         <nav className="hidden items-center gap-8 md:flex">
-          {navigationItems.map((item) => (
-            <Link
-              key={item.link}
-              href={item.link}
-              className={`minion-bold inline-flex items-center text-xs uppercase tracking-[0.2em] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-royal-gold-400 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent md:text-sm ${
-                pathname === item.link
-                  ? 'text-royal-gold-400'
-                  : 'text-foreground hover:text-royal-gold-400'
-              }`}
-            >
-              {item.label}
-            </Link>
-          ))}
+          {navigationItems.map((item) => {
+            const isActive = pathname === item.link || (item.link === '/admin' && isOnAdminRoute);
+            const isAdminItem = item.link === '/admin' && user?.role === 'admin';
+
+            if (isAdminItem) {
+              return (
+                <div key={item.link} className="relative">
+                  <button
+                    type="button"
+                    onClick={toggleAdmin}
+                    className={`minion-bold inline-flex items-center gap-1 text-xs uppercase tracking-[0.2em] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-royal-gold-400 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent md:text-sm ${
+                      isActive ? 'text-royal-gold-400' : 'text-foreground hover:text-royal-gold-400'
+                    }`}
+                  >
+                    {item.label}
+                    <ChevronDown
+                      className={`h-4 w-4 transition-transform ${
+                        isAdminOpen ? 'rotate-180' : 'rotate-0'
+                      }`}
+                    />
+                  </button>
+
+                  {isAdminOpen && (
+                    <div className="absolute right-0 mt-2 w-56 rounded-md bg-background/95 shadow-lg ring-1 ring-border/60">
+                      <div className="py-2">
+                        <Link
+                          href="/admin/requests"
+                          className={`block px-4 py-2 text-xs uppercase tracking-[0.18em] minion-bold transition-colors ${
+                            pathname?.startsWith('/admin/requests')
+                              ? 'text-royal-gold-400'
+                              : 'text-foreground hover:text-royal-gold-400'
+                          }`}
+                        >
+                          Medlemsansökningar
+                        </Link>
+                        <Link
+                          href="/admin/create"
+                          className={`block px-4 py-2 text-xs uppercase tracking-[0.18em] minion-bold transition-colors ${
+                            pathname?.startsWith('/admin/create')
+                              ? 'text-royal-gold-400'
+                              : 'text-foreground hover:text-royal-gold-400'
+                          }`}
+                        >
+                          Skapa konto
+                        </Link>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              );
+            }
+
+            return (
+              <Link
+                key={item.link}
+                href={item.link}
+                className={`minion-bold inline-flex items-center text-xs uppercase tracking-[0.2em] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-royal-gold-400 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent md:text-sm ${
+                  isActive ? 'text-royal-gold-400' : 'text-foreground hover:text-royal-gold-400'
+                }`}
+              >
+                {item.label}
+              </Link>
+            );
+          })}
           {!loading &&
             (user ? (
               <button
@@ -136,24 +194,59 @@ export default function Navbar() {
         </button>
       </div>
 
-      {/* Mobile nav overlay */}
       {isOpen && (
         <nav className="absolute inset-x-0 top-full z-40 bg-background py-4 backdrop-blur-md md:hidden">
           <div className="mx-auto flex max-w-6xl flex-col gap-1 px-4">
-            {navigationItems.map((item) => (
-              <Link
-                key={item.link}
-                href={item.link}
-                onClick={closeMenu}
-                className={`minion-bold flex items-center py-2 text-sm uppercase tracking-[0.18em] transition-colors ${
-                  pathname === item.link
-                    ? 'text-royal-gold-400'
-                    : 'text-foreground hover:text-royal-gold-400'
-                }`}
-              >
-                {item.label}
-              </Link>
-            ))}
+            {navigationItems.map((item) => {
+              const isAdminItem = item.link === '/admin' && user?.role === 'admin';
+
+              if (isAdminItem) {
+                return (
+                  <div key={item.link} className="flex flex-col">
+                    <span className="minion-bold py-2 text-sm uppercase tracking-[0.18em] text-foreground/70">
+                      {item.label}
+                    </span>
+                    <Link
+                      href="/admin/requests"
+                      onClick={closeMenu}
+                      className={`minion-bold flex items-center py-1 text-sm uppercase tracking-[0.18em] transition-colors ${
+                        pathname?.startsWith('/admin/requests')
+                          ? 'text-royal-gold-400'
+                          : 'text-foreground hover:text-royal-gold-400'
+                      }`}
+                    >
+                      Medlemsansökningar
+                    </Link>
+                    <Link
+                      href="/admin/create"
+                      onClick={closeMenu}
+                      className={`minion-bold flex items-center py-1 text-sm uppercase tracking-[0.18em] transition-colors ${
+                        pathname?.startsWith('/admin/create')
+                          ? 'text-royal-gold-400'
+                          : 'text-foreground hover:text-royal-gold-400'
+                      }`}
+                    >
+                      Skapa konto
+                    </Link>
+                  </div>
+                );
+              }
+
+              return (
+                <Link
+                  key={item.link}
+                  href={item.link}
+                  onClick={closeMenu}
+                  className={`minion-bold flex items-center py-2 text-sm uppercase tracking-[0.18em] transition-colors ${
+                    pathname === item.link
+                      ? 'text-royal-gold-400'
+                      : 'text-foreground hover:text-royal-gold-400'
+                  }`}
+                >
+                  {item.label}
+                </Link>
+              );
+            })}
 
             {!loading &&
               (user ? (

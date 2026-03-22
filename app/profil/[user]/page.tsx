@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { neon } from '@neondatabase/serverless';
 import Image from 'next/image';
@@ -36,6 +37,44 @@ async function getMemberById(id: string): Promise<Member | null> {
   return rows[0] as Member;
 }
 
+export async function generateMetadata(props: {
+  params: Promise<{ user: string }>;
+}): Promise<Metadata> {
+  const { params } = props;
+  const { user } = await params;
+
+  const member = await getMemberById(user);
+
+  if (!member) {
+    return {
+      title: 'Profil',
+    };
+  }
+
+  const title = member.name;
+
+  const images = member.profile_image_url
+    ? [
+        {
+          url: member.profile_image_url,
+          alt: member.name,
+        },
+      ]
+    : undefined;
+
+  return {
+    title,
+    openGraph: {
+      title,
+      images,
+    },
+    twitter: {
+      title,
+      images,
+    },
+  };
+}
+
 export default async function ProfilePage(props: { params: Promise<{ user: string }> }) {
   const { params } = props;
   const { user } = await params;
@@ -55,16 +94,26 @@ export default async function ProfilePage(props: { params: Promise<{ user: strin
       <div className="mt-6 flex justify-center">
         <div className="relative h-48 w-48 rounded-full overflow-hidden border md:h-64 md:w-64">
           {member.profile_image_url ? (
-            <Image
-              src={member.profile_image_url}
-              alt={member.name}
-              fill
-              sizes="(max-width: 768px) 10rem, 12rem"
-              className="object-cover"
-            />
+            <a href={member.profile_image_url} target="_blank" rel="noopener noreferrer">
+              <div className="relative h-48 w-48 md:h-64 md:w-64">
+                <Image
+                  src={member.profile_image_url}
+                  alt={member.name}
+                  fill
+                  sizes="(max-width: 768px) 10rem, 12rem"
+                  className="object-cover"
+                />
+              </div>
+            </a>
           ) : (
-            <div className="flex h-full w-full items-center justify-center text-sm text-foreground/60">
-              Ingen bild
+            <div className="relative h-48 w-48 md:h-64 md:w-64">
+              <Image
+                src="/sheep.jpg"
+                alt="Ingen profilbild"
+                fill
+                sizes="(max-width: 768px) 10rem, 12rem"
+                className="object-cover"
+              />
             </div>
           )}
         </div>

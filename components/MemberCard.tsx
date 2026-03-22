@@ -47,8 +47,7 @@ export function MemberCard({ member, color = 'purple' }: ExperimentalMemberCardP
             className="object-cover"
           />
 
-          {/* Expand icon in bottom-right of the image */}
-          <div className="pointer-events-none absolute bottom-1 right-1 flex h-7 w-7 items-center justify-center rounded-full bg-black/60 text-white shadow-[0_2px_4px_rgba(0,0,0,0.6)]">
+          <div className="pointer-events-none absolute bottom-1 right-1 flex h-7 w-7 items-center justify-center text-white">
             <Expand className="h-4 w-4" />
           </div>
         </div>

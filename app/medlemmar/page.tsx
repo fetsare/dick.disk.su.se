@@ -3,6 +3,8 @@ import { PageTitle } from '@/components/PageTitle';
 import { neon } from '@neondatabase/serverless';
 import { MemberCard } from '@/components/MemberCard';
 import { pagesMetadata } from '../metadata';
+import { Button } from '@/components/Button';
+import Link from 'next/link';
 
 export const revalidate = 60;
 export const metadata: Metadata = pagesMetadata.members;
@@ -73,15 +75,11 @@ export default async function Members() {
           ))}
         </div>
       </div>
-
-      <div className="mt-8 flex justify-center">
-        <a
-          href="/bli-medlem"
-          className="inline-flex items-center rounded-md border border-royal-gold-400 px-6 py-3 text-sm font-medium uppercase tracking-[0.18em] text-royal-gold-400 transition-colors hover:bg-royal-gold-400 hover:text-background"
-        >
-          Bli medlem
-        </a>
-      </div>
+      <Link href={'/bli-medlem'}>
+        <Button type="submit" className="mt-2 rounded-full text-lg">
+          Ansök om medlemskap
+        </Button>
+      </Link>
     </div>
   );
 }

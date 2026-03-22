@@ -8,7 +8,7 @@ import type { User } from '@/lib/types';
 type CardColorVariant = 'green' | 'purple' | 'brown';
 
 interface ExperimentalMemberCardProps {
-  member: User & { membershipStartDate: Date | string };
+  member: User & { membershipStartDate: Date | string; updated_at?: string | Date };
   color?: CardColorVariant;
 }
 
@@ -16,7 +16,9 @@ export function MemberCard({ member, color = 'purple' }: ExperimentalMemberCardP
   const memberLength = formatMembershipDuration(member.membershipStartDate);
   const profileImageSrc: string =
     typeof member.profile_image_url === 'string' && member.profile_image_url.length > 0
-      ? `${member.profile_image_url}?v=${encodeURIComponent(member.id)}`
+      ? `${member.profile_image_url}?v=${encodeURIComponent(
+          (member.updated_at ?? member.id).toString(),
+        )}`
       : '/sheep.jpg';
 
   const titleGradientClass =

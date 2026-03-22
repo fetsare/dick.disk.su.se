@@ -56,14 +56,10 @@ export async function generateMetadata(props: {
 
   const description = member.description?.trim() || undefined;
 
-  const imageUrl = member.profile_image_url
-    ? `${member.profile_image_url}?v=${encodeURIComponent(member.updated_at ?? member.id)}`
-    : undefined;
-
-  const images = imageUrl
+  const images = member.profile_image_url
     ? [
         {
-          url: imageUrl,
+          url: member.profile_image_url,
           alt: member.name,
         },
       ]
@@ -104,17 +100,13 @@ export default async function ProfilePage(props: { params: Promise<{ user: strin
         <div className="relative h-48 w-48 rounded-full overflow-hidden border md:h-64 md:w-64">
           {member.profile_image_url ? (
             <a
-              href={`${member.profile_image_url}?v=${encodeURIComponent(
-                member.updated_at ?? member.id,
-              )}`}
+        href={member.profile_image_url}
               target="_blank"
               rel="noopener noreferrer"
             >
               <div className="relative h-48 w-48 md:h-64 md:w-64">
                 <Image
-                  src={`${member.profile_image_url}?v=${encodeURIComponent(
-                    member.updated_at ?? member.id,
-                  )}`}
+          src={member.profile_image_url}
                   alt={member.name}
                   fill
                   sizes="(max-width: 768px) 10rem, 12rem"

@@ -16,9 +16,7 @@ export function MemberCard({ member, color = 'purple' }: ExperimentalMemberCardP
   const memberLength = formatMembershipDuration(member.membershipStartDate);
   const profileImageSrc: string =
     typeof member.profile_image_url === 'string' && member.profile_image_url.length > 0
-      ? `${member.profile_image_url}?v=${encodeURIComponent(
-          (member.updated_at ?? member.id).toString(),
-        )}`
+  ? member.profile_image_url
       : '/sheep.jpg';
 
   const titleGradientClass =

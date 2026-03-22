@@ -5,7 +5,7 @@ import { revalidatePath } from 'next/cache';
 import { getCurrentUser } from '@/lib/session';
 import { hashPassword } from '@/lib/hash-password';
 import bcrypt from 'bcryptjs';
-import { put } from '@vercel/blob';
+import { del, put } from '@vercel/blob';
 
 export async function updateProfile(formData: FormData) {
   const user = await getCurrentUser();
@@ -137,30 +137,52 @@ export async function uploadProfileImage(formData: FormData) {
   if (!process.env.BLOB_READ_WRITE_TOKEN) {
     throw new Error('BLOB_READ_WRITE_TOKEN är inte satt');
   }
-
-  const blob = await put(`profiles/${user.id}`, file, {
-    access: 'public',
-    token: process.env.BLOB_READ_WRITE_TOKEN,
-    allowOverwrite: true,
-  });
-
   const databaseUrl = process.env.DATABASE_URL;
   if (!databaseUrl) {
     throw new Error('DATABASE_URL är inte satt');
   }
 
   const sql = neon(databaseUrl);
+  const rows = await sql`
+    SELECT profile_image_url
+    FROM users
+    WHERE id = ${user.id}
+    LIMIT 1
+  `;
+  const existing = rows[0] as { profile_image_url: string | null } | undefined;
+  const oldUrl = existing?.profile_image_url ?? null;
 
-  const versionedUrl = `${blob.url}?v=${Date.now()}`;
+  const timestamp = Date.now();
+  const sanitizedName = file.name.replace(/[^a-zA-Z0-9._-]/g, '_');
+  const blobKey = `profiles/${user.id}/${timestamp}-${sanitizedName}`;
+
+  const blob = await put(blobKey, file, {
+    access: 'public',
+    token: process.env.BLOB_READ_WRITE_TOKEN,
+  });
+
+  const newUrl = blob.url;
 
   await sql`
     UPDATE users
-    SET profile_image_url = ${versionedUrl}, updated_at = NOW()
+    SET profile_image_url = ${newUrl}, updated_at = NOW()
     WHERE id = ${user.id}
   `;
+
+  // Försök ta bort gammal blob om den låg i samma Vercel Blob-bucket
+  if (oldUrl) {
+    try {
+      const oldUrlObj = new URL(oldUrl);
+      const oldKey = oldUrlObj.pathname.replace(/^\/+/, '');
+      if (oldKey) {
+        await del(oldKey, { token: process.env.BLOB_READ_WRITE_TOKEN });
+      }
+    } catch {
+    }
+  }
 
   revalidatePath('/profil');
   revalidatePath('/medlemmar');
 
-  return { success: true as const, url: versionedUrl };
+  return { success: true as const, url: newUrl };
 }

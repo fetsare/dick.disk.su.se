@@ -6,6 +6,8 @@ import { FormField } from '@/components/FormField';
 import { Button } from '@/components/Button';
 import { updateProfile, uploadProfileImage } from './actions';
 
+const MAX_IMAGE_SIZE_BYTES = 5 * 1024 * 1024; // 5 MB
+
 type ProfileFormProps = {
   name: string;
   email: string;
@@ -36,8 +38,23 @@ export function ProfileForm({ name, email, role, profileImageUrl, description, c
     { error: null, success: false },
   );
 
+  const handleImageSubmit = async (formData: FormData) => {
+    if (fileError) {
+      return;
+    }
+
+    const file = fileInputRef.current?.files?.[0];
+    if (file && file.size > MAX_IMAGE_SIZE_BYTES) {
+      setFileError('Bilden får max vara 5 MB.');
+      return;
+    }
+
+    return imageAction(formData);
+  };
+
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [selectedFileName, setSelectedFileName] = useState<string | null>(null);
+  const [fileError, setFileError] = useState<string | null>(null);
 
   return (
     <div className="w-full flex flex-col items-center px-4 py-8 md:py-10">
@@ -99,7 +116,10 @@ export function ProfileForm({ name, email, role, profileImageUrl, description, c
           </div>
         )}
 
-        <form action={imageAction} className="space-y-4 text-sm">
+        <form
+          action={handleImageSubmit}
+          className="space-y-4 text-sm"
+        >
           <input
             ref={fileInputRef}
             type="file"
@@ -108,7 +128,14 @@ export function ProfileForm({ name, email, role, profileImageUrl, description, c
             className="hidden"
             onChange={(e) => {
               const file = e.target.files?.[0];
-              setSelectedFileName(file ? file.name : null);
+
+              if (file && file.size > MAX_IMAGE_SIZE_BYTES) {
+                setFileError('Bilden får max vara 5 MB.');
+                setSelectedFileName(null);
+              } else {
+                setFileError(null);
+                setSelectedFileName(file ? file.name : null);
+              }
             }}
           />
 
@@ -125,8 +152,10 @@ export function ProfileForm({ name, email, role, profileImageUrl, description, c
             </span>
           </div>
 
+          {fileError && <p className="text-sm text-red-500">{fileError}</p>}
+
           {imageState.error && <p className="text-sm text-red-500">{imageState.error}</p>}
-          {imageState.success && !imageState.error && (
+          {imageState.success && !imageState.error && !fileError && (
             <p className="text-sm text-green-600">Profilbild uppdaterad.</p>
           )}
 

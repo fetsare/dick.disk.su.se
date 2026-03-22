@@ -133,9 +133,9 @@ export async function uploadProfileImage(formData: FormData) {
     return { error: 'Endast bildfiler är tillåtna.' };
   }
 
-  const MAX_SIZE = 2 * 1024 * 1024;
+  const MAX_SIZE = 5 * 1024 * 1024;
   if (file.size > MAX_SIZE) {
-    return { error: 'Bilden får vara max 2 MB.' };
+    return { error: 'Bilden får vara max 5 MB.' };
   }
 
   if (!process.env.BLOB_READ_WRITE_TOKEN) {

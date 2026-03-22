@@ -15,7 +15,14 @@ type ProfileFormProps = {
   profileImageUrl?: string | null;
   description?: string | null;
 };
-export function ProfileForm({ name, email, role, profileImageUrl, description, colonist_link }: ProfileFormProps & { colonist_link?: string | null }) {
+export function ProfileForm({
+  name,
+  email,
+  role,
+  profileImageUrl,
+  description,
+  colonist_link,
+}: ProfileFormProps & { colonist_link?: string | null }) {
   const [state, formAction, pending] = useActionState(
     async (_prevState: { error: string | null; success: boolean }, formData: FormData) => {
       const result = await updateProfile(formData);
@@ -116,10 +123,7 @@ export function ProfileForm({ name, email, role, profileImageUrl, description, c
           </div>
         )}
 
-        <form
-          action={handleImageSubmit}
-          className="space-y-4 text-sm"
-        >
+        <form action={handleImageSubmit} className="space-y-4 text-sm">
           <input
             ref={fileInputRef}
             type="file"

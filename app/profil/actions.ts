@@ -29,13 +29,9 @@ export async function updateProfile(formData: FormData) {
   const trimmedName = name.trim();
   const trimmedEmail = email.trim();
   const trimmedDescription =
-    typeof description === 'string' && description.trim().length > 0
-      ? description.trim()
-      : null;
+    typeof description === 'string' && description.trim().length > 0 ? description.trim() : null;
   const trimmedColonistLink =
-    typeof colonistLink === 'string' && colonistLink.trim().length > 0
-      ? colonistLink.trim()
-      : null;
+    typeof colonistLink === 'string' && colonistLink.trim().length > 0 ? colonistLink.trim() : null;
 
   if (!trimmedName || !trimmedEmail) {
     return { error: 'Namn och e‑post får inte vara tomma.' };

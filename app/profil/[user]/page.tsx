@@ -53,6 +53,8 @@ export async function generateMetadata(props: {
 
   const title = member.name;
 
+  const description = member.description?.trim() || undefined;
+
   const images = member.profile_image_url
     ? [
         {
@@ -66,10 +68,12 @@ export async function generateMetadata(props: {
     title,
     openGraph: {
       title,
+      description,
       images,
     },
     twitter: {
       title,
+      description,
       images,
     },
   };

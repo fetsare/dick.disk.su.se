@@ -2,24 +2,55 @@
 
 import { cookies } from 'next/headers';
 import { neon } from '@neondatabase/serverless';
-import type { UserDb } from '@/lib/types';
+import jwt from 'jsonwebtoken';
+import type { UserDb, UserRole } from '@/lib/types';
 
 const SESSION_COOKIE = 'session';
 
-export async function getCurrentUser(): Promise<UserDb | null> {
+type JwtPayload = { sub?: string; role?: UserRole };
+
+export async function getJwtPayload(): Promise<JwtPayload | null> {
   const cookieStore = await cookies();
-  const value = cookieStore.get(SESSION_COOKIE)?.value;
+  const token = cookieStore.get(SESSION_COOKIE)?.value;
 
-  if (!value) return null;
+  if (!token) return null;
 
-  let parsed: { id: string; role?: string } | null = null;
+  const jwtSecret = process.env.JWT_SECRET;
+  if (!jwtSecret) {
+    throw new Error('JWT_SECRET är inte satt');
+  }
+
   try {
-    parsed = JSON.parse(value);
+    const payload = jwt.verify(token, jwtSecret) as JwtPayload;
+    return payload;
   } catch {
     return null;
   }
+}
 
-  if (!parsed?.id) return null;
+export async function requireAdmin(): Promise<JwtPayload & { sub: string; role: 'admin' }> {
+  const payload = await getJwtPayload();
+
+  if (!payload || payload.role !== 'admin' || !payload.sub) {
+    throw new Error('Inte behörig: admin krävs');
+  }
+
+  return { sub: payload.sub, role: 'admin' };
+}
+
+export async function requireMember(): Promise<JwtPayload & { sub: string; role: 'member' }> {
+  const payload = await getJwtPayload();
+
+  if (!payload || payload.role !== 'member' || !payload.sub) {
+    throw new Error('Inte behörig: admin krävs');
+  }
+
+  return { sub: payload.sub, role: 'member' };
+}
+
+export async function getCurrentUser(): Promise<UserDb | null> {
+  const payload = await getJwtPayload();
+  if (!payload?.sub) return null;
 
   const databaseUrl = process.env.DATABASE_URL;
   if (!databaseUrl) {
@@ -31,7 +62,7 @@ export async function getCurrentUser(): Promise<UserDb | null> {
   const result = await sql`
   SELECT id, email, name, role, password_hash, created_at, is_active, profile_image_url, description, colonist_link
     FROM users
-    WHERE id = ${parsed.id}
+    WHERE id = ${payload.sub}
       AND is_active = TRUE
     LIMIT 1
   `;

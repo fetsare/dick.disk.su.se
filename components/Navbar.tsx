@@ -12,6 +12,17 @@ export interface NavbarItem {
   link: string;
 }
 
+const ADMIN_LINKS: NavbarItem[] = [
+  {
+    label: 'Medlemsansökningar',
+    link: '/admin/requests',
+  },
+  {
+    label: 'Skapa konto',
+    link: '/admin/create',
+  },
+];
+
 export const BASE_NAVIGATION_ITEMS: NavbarItem[] = [
   {
     label: 'Hem',
@@ -118,26 +129,23 @@ export default function Navbar() {
                   {isAdminOpen && (
                     <div className="absolute right-0 mt-2 w-56 rounded-md bg-background/95 shadow-lg ring-1 ring-border/60">
                       <div className="py-2">
-                        <Link
-                          href="/admin/requests"
-                          className={`block px-4 py-2 text-xs uppercase tracking-[0.18em] minion-bold transition-colors ${
-                            pathname?.startsWith('/admin/requests')
-                              ? 'text-royal-gold-400'
-                              : 'text-foreground hover:text-royal-gold-400'
-                          }`}
-                        >
-                          Medlemsansökningar
-                        </Link>
-                        <Link
-                          href="/admin/create"
-                          className={`block px-4 py-2 text-xs uppercase tracking-[0.18em] minion-bold transition-colors ${
-                            pathname?.startsWith('/admin/create')
-                              ? 'text-royal-gold-400'
-                              : 'text-foreground hover:text-royal-gold-400'
-                          }`}
-                        >
-                          Skapa konto
-                        </Link>
+                        {ADMIN_LINKS.map((adminItem) => {
+                          const isAdminLinkActive = pathname?.startsWith(adminItem.link);
+
+                          return (
+                            <Link
+                              key={adminItem.link}
+                              href={adminItem.link}
+                              className={`block px-4 py-2 text-xs uppercase tracking-[0.18em] minion-bold transition-colors ${
+                                isAdminLinkActive
+                                  ? 'text-royal-gold-400'
+                                  : 'text-foreground hover:text-royal-gold-400'
+                              }`}
+                            >
+                              {adminItem.label}
+                            </Link>
+                          );
+                        })}
                       </div>
                     </div>
                   )}
@@ -206,28 +214,24 @@ export default function Navbar() {
                     <span className="minion-bold py-2 text-sm uppercase tracking-[0.18em] text-foreground/70">
                       {item.label}
                     </span>
-                    <Link
-                      href="/admin/requests"
-                      onClick={closeMenu}
-                      className={`minion-bold flex items-center py-1 text-sm uppercase tracking-[0.18em] transition-colors ${
-                        pathname?.startsWith('/admin/requests')
-                          ? 'text-royal-gold-400'
-                          : 'text-foreground hover:text-royal-gold-400'
-                      }`}
-                    >
-                      Medlemsansökningar
-                    </Link>
-                    <Link
-                      href="/admin/create"
-                      onClick={closeMenu}
-                      className={`minion-bold flex items-center py-1 text-sm uppercase tracking-[0.18em] transition-colors ${
-                        pathname?.startsWith('/admin/create')
-                          ? 'text-royal-gold-400'
-                          : 'text-foreground hover:text-royal-gold-400'
-                      }`}
-                    >
-                      Skapa konto
-                    </Link>
+                    {ADMIN_LINKS.map((adminItem) => {
+                      const isAdminLinkActive = pathname?.startsWith(adminItem.link);
+
+                      return (
+                        <Link
+                          key={adminItem.link}
+                          href={adminItem.link}
+                          onClick={closeMenu}
+                          className={`minion-bold flex items-center py-1 text-sm uppercase tracking-[0.18em] transition-colors ${
+                            isAdminLinkActive
+                              ? 'text-royal-gold-400'
+                              : 'text-foreground hover:text-royal-gold-400'
+                          }`}
+                        >
+                          {adminItem.label}
+                        </Link>
+                      );
+                    })}
                   </div>
                 );
               }

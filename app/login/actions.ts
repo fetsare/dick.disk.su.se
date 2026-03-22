@@ -3,9 +3,11 @@
 import { neon } from '@neondatabase/serverless';
 import { cookies } from 'next/headers';
 import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
 import type { UserDb } from '@/lib/types';
 
 const SESSION_COOKIE = 'session';
+const JWT_EXPIRES_IN_SECONDS = 60 * 60 * 24 * 7;
 
 export async function login(formData: FormData) {
   const email = formData.get('email');
@@ -40,13 +42,29 @@ export async function login(formData: FormData) {
     return { error: 'Fel e‑post eller lösenord.' };
   }
 
+  const jwtSecret = process.env.JWT_SECRET;
+  if (!jwtSecret) {
+    throw new Error('JWT_SECRET är inte satt');
+  }
+
+  const token = jwt.sign(
+    {
+      sub: String(user.id),
+      role: user.role,
+    },
+    jwtSecret,
+    {
+      expiresIn: JWT_EXPIRES_IN_SECONDS,
+    },
+  );
+
   const cookieStore = await cookies();
-  cookieStore.set(SESSION_COOKIE, JSON.stringify({ id: user.id, role: user.role }), {
+  cookieStore.set(SESSION_COOKIE, token, {
     httpOnly: true,
     sameSite: 'lax',
     path: '/',
     secure: process.env.NODE_ENV === 'production',
-    maxAge: 60 * 60 * 24 * 7,
+    maxAge: JWT_EXPIRES_IN_SECONDS,
   });
 
   // Return minimal user info so the client can persist it in localStorage

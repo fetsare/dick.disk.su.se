@@ -2,7 +2,7 @@
 
 import { neon } from '@neondatabase/serverless';
 import { revalidatePath } from 'next/cache';
-import { getCurrentUser } from '@/lib/session';
+import { requireAdmin } from '@/lib/session';
 import { hashPassword } from '@/lib/hash-password';
 import { generateTempPassword } from '@/lib/generate-temp-password';
 
@@ -16,6 +16,7 @@ export type MemberRequest = {
 };
 
 export async function getPendingRequests(): Promise<MemberRequest[]> {
+  await requireAdmin();
   const databaseUrl = process.env.DATABASE_URL;
   if (!databaseUrl) {
     throw new Error('DATABASE_URL is not set');
@@ -34,11 +35,7 @@ export async function getPendingRequests(): Promise<MemberRequest[]> {
 }
 
 export async function approveRequest(id: string) {
-  const admin = await getCurrentUser();
-  if (!admin || admin.role !== 'admin') {
-    throw new Error('Endast admin kan godkänna ansökningar.');
-  }
-
+  const admin = await requireAdmin();
   const databaseUrl = process.env.DATABASE_URL;
   if (!databaseUrl) {
     throw new Error('DATABASE_URL is not set');
@@ -71,7 +68,7 @@ export async function approveRequest(id: string) {
 
     await sql`
       UPDATE member_requests
-      SET status = 'approved', reviewed_by = ${admin.id}, reviewed_at = NOW()
+      SET status = 'approved', reviewed_by = ${admin.sub}, reviewed_at = NOW()
       WHERE id = ${id}
     `;
 
@@ -93,16 +90,11 @@ export async function approveRequest(id: string) {
 }
 
 export async function createMemberAccount(name: string, email: string) {
-  const admin = await getCurrentUser();
-  if (!admin || admin.role !== 'admin') {
-    throw new Error('Endast admin kan skapa konton.');
-  }
-
+  await requireAdmin();
   const databaseUrl = process.env.DATABASE_URL;
   if (!databaseUrl) {
     throw new Error('DATABASE_URL is not set');
   }
-
   const sql = neon(databaseUrl);
 
   await sql`BEGIN`;
@@ -130,10 +122,7 @@ export async function createMemberAccount(name: string, email: string) {
 }
 
 export async function rejectRequest(id: string) {
-  const admin = await getCurrentUser();
-  if (!admin || admin.role !== 'admin') {
-    throw new Error('Endast admin kan avslå ansökningar.');
-  }
+  const admin = await requireAdmin();
 
   const databaseUrl = process.env.DATABASE_URL;
   if (!databaseUrl) {
@@ -144,7 +133,7 @@ export async function rejectRequest(id: string) {
 
   await sql`
     UPDATE member_requests
-    SET status = 'rejected', reviewed_by = ${admin.id}, reviewed_at = NOW()
+    SET status = 'rejected', reviewed_by = ${admin.sub}, reviewed_at = NOW()
     WHERE id = ${id} AND status = 'pending'
   `;
 

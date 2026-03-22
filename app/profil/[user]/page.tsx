@@ -5,10 +5,6 @@ import { PageTitle } from '@/components/PageTitle';
 
 export const revalidate = 60;
 
-interface ProfilePageProps {
-  params: { user: string };
-}
-
 type Member = {
   id: string;
   name: string;
@@ -40,8 +36,9 @@ async function getMemberById(id: string): Promise<Member | null> {
   return rows[0] as Member;
 }
 
-export default async function ProfilePage({ params }: ProfilePageProps) {
-  const { user } = params;
+export default async function ProfilePage(props: { params: Promise<{ user: string }> }) {
+  const { params } = props;
+  const { user } = await params;
 
   const member = await getMemberById(user);
 
@@ -56,7 +53,7 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
       <PageTitle>{member.name}</PageTitle>
 
       <div className="mt-6 flex justify-center">
-        <div className="relative h-40 w-40 rounded-full overflow-hidden border border-border bg-muted/40 shadow-sm md:h-48 md:w-48">
+        <div className="relative h-48 w-48 rounded-full overflow-hidden border md:h-64 md:w-64">
           {member.profile_image_url ? (
             <Image
               src={member.profile_image_url}
@@ -74,38 +71,28 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
       </div>
 
       {hasDescription && (
-        <section className="mt-8 w-full max-w-2xl px-4 sm:px-6 lg:px-8">
-          <div className="rounded-lg border border-border bg-background/70 p-4 shadow-sm">
-            <h2 className="minion-bold mb-2 text-xs uppercase tracking-[0.18em] text-foreground/70">
-              Beskrivning
-            </h2>
-            <p className="text-sm leading-relaxed text-foreground/90 whitespace-pre-line">
-              {member.description}
-            </p>
+        <section className="m-8">
+          <div className="border-4 max-w-80 border-[#b69a6d] bg-[#f5e7c7] px-4 h-full text-center text-[11px] leading-snug text-[#3b2c1c] flex items-center justify-center rounded-md">
+            {member.description && (
+              <div className="text-[15px] text-black font-minion-italic max-h-full overflow-hidden text-ellipsis">
+                {member.description}
+              </div>
+            )}
           </div>
-        </section>
-      )}
-
-      {member.colonist_link && (
-        <section className="mt-4 w-full max-w-2xl px-4 sm:px-6 lg:px-8">
-          <div className="rounded-lg border border-border bg-background/70 p-4 shadow-sm flex items-center justify-between gap-3">
-            <div>
-              <h2 className="minion-bold text-xs uppercase tracking-[0.18em] text-foreground/70">
-                Colonist-profil
-              </h2>
-              <p className="mt-1 text-sm text-foreground/90 break-all">
-                {member.colonist_link}
-              </p>
+          {member.colonist_link && (
+            <div className="mt-4 flex justify-center">
+              <a
+                href={member.colonist_link}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 text-md text-foreground hover:underline"
+              >
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src="/colonist.png" alt="Colonist" className="h-6 w-6 object-contain" />
+                <span>Spela med {member.name} på Colonist</span>
+              </a>
             </div>
-            <a
-              href={member.colonist_link}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="minion-bold inline-flex items-center rounded-md border border-royal-gold-400 px-3 py-1.5 text-xs uppercase tracking-[0.18em] text-royal-gold-400 transition-colors hover:bg-royal-gold-400 hover:text-background"
-            >
-              Öppna
-            </a>
-          </div>
+          )}
         </section>
       )}
     </div>

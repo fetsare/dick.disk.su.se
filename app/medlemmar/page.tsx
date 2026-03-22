@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { PageTitle } from '@/components/PageTitle';
 import { neon } from '@neondatabase/serverless';
-import { ExperimentalMemberCard } from '@/components/ExperimentalMemberCard';
+import { MemberCard } from '@/components/MemberCard';
 import { pagesMetadata } from '../metadata';
 
 export const revalidate = 60;
@@ -55,16 +55,7 @@ export default async function Members() {
         >
           {members.map((member) => (
             <div key={member.id} className="flex justify-center">
-              {/* Existing member card */}
-              {/* <MemberCard
-                name={member.name}
-                profileImageUrl={member.profile_image_url}
-                createdAt={member.created_at}
-                size="md"
-              /> */}
-
-              {/* Experimental Catan-style member card */}
-              <ExperimentalMemberCard
+              <MemberCard
                 member={{
                   id: member.id,
                   email: '',

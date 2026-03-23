@@ -20,8 +20,14 @@ async function getSql() {
   return neon(databaseUrl);
 }
 
-export async function getProfileComments(profileUserId: string): Promise<ProfileComment[]> {
+export async function getProfileComments(
+  profileUserId: string,
+  options?: { offset?: number; limit?: number },
+): Promise<ProfileComment[]> {
   const sql = await getSql();
+
+  const limit = options?.limit ?? 10;
+  const offset = options?.offset ?? 0;
 
   const rows = await sql`
     SELECT
@@ -35,7 +41,7 @@ export async function getProfileComments(profileUserId: string): Promise<Profile
     JOIN users AS u ON u.id = c.author_user_id
     WHERE c.profile_user_id = ${profileUserId}
     ORDER BY c.profile_user_id, c.created_at DESC
-    LIMIT 100
+  LIMIT ${limit} OFFSET ${offset}
   `;
 
   return rows as ProfileComment[];

@@ -95,7 +95,7 @@ export default async function ProfilePage(props: { params: Promise<{ user: strin
   const hasDescription = Boolean(member.description && member.description.trim().length > 0);
   const memberLength = formatMembershipDuration(member.created_at);
   const [comments, currentUser] = await Promise.all([
-    getProfileComments(member.id),
+    getProfileComments(member.id, { limit: 10, offset: 0 }),
     getCurrentUser(),
   ]);
 

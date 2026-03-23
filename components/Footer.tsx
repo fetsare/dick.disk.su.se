@@ -149,9 +149,13 @@ export default function Footer() {
               href="https://github.com/fetsare/dick.disk.su.se"
               target="_blank"
               rel="noreferrer"
-              className="flex items-center gap-2 lettering text-foreground transition-colors hover:text-royal-gold-400"
+              className="flex items-center justify-center gap-2 lettering text-foreground transition-colors hover:text-royal-gold-400"
             >
-              <span>GitHub</span>
+              <img
+                src="https://img.shields.io/github/last-commit/fetsare/dick.disk.su.se"
+                alt="GitHub last commit"
+              />
+              GitHub
             </a>
             <a
               href="https://en.wikipedia.org/wiki/Catan"

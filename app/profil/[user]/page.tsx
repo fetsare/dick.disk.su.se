@@ -4,6 +4,9 @@ import { neon } from '@neondatabase/serverless';
 import Image from 'next/image';
 import { PageTitle } from '@/components/PageTitle';
 import { formatMembershipDuration } from '@/lib/format-membership-duration';
+import { getCurrentUser } from '@/lib/session';
+import { getProfileComments } from '../comments-actions';
+import { ProfileComments } from '../profile-comments';
 
 type Member = {
   id: string;
@@ -91,6 +94,10 @@ export default async function ProfilePage(props: { params: Promise<{ user: strin
 
   const hasDescription = Boolean(member.description && member.description.trim().length > 0);
   const memberLength = formatMembershipDuration(member.created_at);
+  const [comments, currentUser] = await Promise.all([
+    getProfileComments(member.id),
+    getCurrentUser(),
+  ]);
 
   return (
     <div className="flex flex-col items-center w-full py-8 md:py-10">
@@ -151,6 +158,14 @@ export default async function ProfilePage(props: { params: Promise<{ user: strin
           )}
         </section>
       )}
+
+      <section className="w-full max-w-2xl mt-4 px-4">
+        <ProfileComments
+          profileUserId={member.id}
+          initialComments={comments}
+          isLoggedIn={Boolean(currentUser)}
+        />
+      </section>
     </div>
   );
 }

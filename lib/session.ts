@@ -38,14 +38,16 @@ export async function requireAdmin(): Promise<JwtPayload & { sub: string; role: 
   return { sub: payload.sub, role: 'admin' };
 }
 
-export async function requireMember(): Promise<JwtPayload & { sub: string; role: 'member' }> {
+export async function requireMember(): Promise<
+  JwtPayload & { sub: string; role: 'member' | 'admin' }
+> {
   const payload = await getJwtPayload();
 
-  if (!payload || payload.role !== 'member' || !payload.sub) {
-    throw new Error('Inte behörig: admin krävs');
+  if (!payload || (payload.role !== 'member' && payload.role !== 'admin') || !payload.sub) {
+    throw new Error('Inte behörig: member krävs');
   }
 
-  return { sub: payload.sub, role: 'member' };
+  return { sub: payload.sub, role: payload.role as 'member' | 'admin' };
 }
 
 export async function getCurrentUser(): Promise<UserDb | null> {

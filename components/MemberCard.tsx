@@ -2,7 +2,6 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { Expand } from 'lucide-react';
-import { formatMembershipDuration } from '@/lib/format-membership-duration';
 import type { User } from '@/lib/types';
 
 type CardColorVariant = 'green' | 'purple' | 'brown';
@@ -13,7 +12,6 @@ interface ExperimentalMemberCardProps {
 }
 
 export function MemberCard({ member, color = 'purple' }: ExperimentalMemberCardProps) {
-  const memberLength = formatMembershipDuration(member.membershipStartDate);
   const profileImageSrc: string =
     typeof member.profile_image_url === 'string' && member.profile_image_url.length > 0
       ? member.profile_image_url
@@ -60,10 +58,6 @@ export function MemberCard({ member, color = 'purple' }: ExperimentalMemberCardP
           )}
         </div>
       </Link>
-
-      <div className="rounded-md bg-[#f5e7c7] px-3 py-1 text-[13px] text-[#3b2c1c] shadow-sm border border-[#b69a6d]">
-        {memberLength}
-      </div>
       {member.colonist_link && (
         <Link
           href={member.colonist_link}

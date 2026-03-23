@@ -5,6 +5,7 @@ import { revalidatePath } from 'next/cache';
 import { requireAdmin } from '@/lib/session';
 import { hashPassword } from '@/lib/hash-password';
 import { generateTempPassword } from '@/lib/generate-temp-password';
+import { generateSlugFromName } from '@/lib/slug';
 
 export type MemberRequest = {
   id: string;
@@ -66,6 +67,8 @@ export async function approveRequest(id: string) {
 
     reqEmail = req.email;
 
+  const slug = generateSlugFromName(req.name);
+
     await sql`
       UPDATE member_requests
       SET status = 'approved', reviewed_by = ${admin.sub}, reviewed_at = NOW()
@@ -74,8 +77,8 @@ export async function approveRequest(id: string) {
 
     // Create user if not already existing; set password_hash for login
     await sql`
-  INSERT INTO users (email, name, role, is_active, password_hash)
-  VALUES (${req.email}, ${req.name}, 'member', TRUE, ${passwordHash})
+  INSERT INTO users (email, name, slug, role, is_active, password_hash)
+  VALUES (${req.email}, ${req.name}, ${slug}, 'member', TRUE, ${passwordHash})
       ON CONFLICT (email) DO NOTHING
     `;
 
@@ -100,13 +103,15 @@ export async function createMemberAccount(name: string, email: string) {
   await sql`BEGIN`;
   const tempPassword = await generateTempPassword();
   const passwordHash = await hashPassword(tempPassword);
+  const slug = generateSlugFromName(name);
 
   try {
     await sql`
-      INSERT INTO users (email, name, role, is_active, password_hash)
-      VALUES (${email}, ${name}, 'member', TRUE, ${passwordHash})
+      INSERT INTO users (email, name, slug, role, is_active, password_hash)
+      VALUES (${email}, ${name}, ${slug}, 'member', TRUE, ${passwordHash})
       ON CONFLICT (email) DO UPDATE SET
         name = EXCLUDED.name,
+        slug = EXCLUDED.slug,
         is_active = TRUE,
         password_hash = EXCLUDED.password_hash
     `;

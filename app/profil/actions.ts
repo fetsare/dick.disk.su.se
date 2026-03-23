@@ -4,6 +4,7 @@ import { neon } from '@neondatabase/serverless';
 import { revalidatePath } from 'next/cache';
 import { getCurrentUser } from '@/lib/session';
 import { hashPassword } from '@/lib/hash-password';
+import { generateSlugFromName } from '@/lib/slug';
 import bcrypt from 'bcryptjs';
 import { del, put } from '@vercel/blob';
 
@@ -43,6 +44,20 @@ export async function updateProfile(formData: FormData) {
   }
 
   const sql = neon(databaseUrl);
+  // Kontrollera att det valda namnet inte redan används av en annan användare
+  const existingNameRows = await sql`
+    SELECT id
+    FROM users
+    WHERE name ILIKE ${trimmedName} AND id <> ${user.id}
+    LIMIT 1
+  `;
+
+  if (existingNameRows.length > 0) {
+    return { error: 'Detta namn används redan av en annan medlem.' };
+  }
+
+  const slug = generateSlugFromName(trimmedName);
+
   let updatePassword = false;
   let passwordHash: string | null = null;
 
@@ -98,18 +113,20 @@ export async function updateProfile(formData: FormData) {
   if (updatePassword && passwordHash) {
     await sql`
       UPDATE users
-  SET name = ${trimmedName}, email = ${trimmedEmail}, description = ${trimmedDescription}, colonist_link = ${trimmedColonistLink}, password_hash = ${passwordHash}, updated_at = NOW()
+  SET name = ${trimmedName}, slug = ${slug}, email = ${trimmedEmail}, description = ${trimmedDescription}, colonist_link = ${trimmedColonistLink}, password_hash = ${passwordHash}, updated_at = NOW()
       WHERE id = ${user.id}
     `;
   } else {
     await sql`
       UPDATE users
-  SET name = ${trimmedName}, email = ${trimmedEmail}, description = ${trimmedDescription}, colonist_link = ${trimmedColonistLink}, updated_at = NOW()
+  SET name = ${trimmedName}, slug = ${slug}, email = ${trimmedEmail}, description = ${trimmedDescription}, colonist_link = ${trimmedColonistLink}, updated_at = NOW()
       WHERE id = ${user.id}
     `;
   }
 
+  revalidatePath('/medlemmar');
   revalidatePath('/profil');
+  revalidatePath(`/profil/${user.id}`);
 
   return { success: true as const };
 }
@@ -149,6 +166,7 @@ export async function uploadProfileImage(formData: FormData) {
     WHERE id = ${user.id}
     LIMIT 1
   `;
+
   const existing = rows[0] as { profile_image_url: string | null } | undefined;
   const oldUrl = existing?.profile_image_url ?? null;
 
@@ -177,12 +195,12 @@ export async function uploadProfileImage(formData: FormData) {
       if (oldKey) {
         await del(oldKey, { token: process.env.BLOB_READ_WRITE_TOKEN });
       }
-    } catch {
-    }
+    } catch {}
   }
 
-  revalidatePath('/profil');
   revalidatePath('/medlemmar');
+  revalidatePath('/profil');
+  revalidatePath(`/profil/${user.id}`);
 
   return { success: true as const, url: newUrl };
 }

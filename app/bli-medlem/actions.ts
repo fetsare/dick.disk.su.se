@@ -18,14 +18,34 @@ export async function createMemberRequest(
   const email = formData.get('email');
   const motivation = formData.get('motivation');
 
-  if (!name || !email || !motivation) {
+  if (typeof name !== 'string' || typeof email !== 'string' || typeof motivation !== 'string') {
+    return { error: 'Ogiltiga formulärvärden.' };
+  }
+
+  const trimmedName = name.trim();
+  const trimmedEmail = email.trim();
+  const trimmedMotivation = motivation.trim();
+
+  if (!trimmedName || !trimmedEmail || !trimmedMotivation) {
     return { error: 'Du måste fylla i alla fält.' };
+  }
+
+  // Kontrollera om namnet redan används av en befintlig medlem
+  const existingUserByName = await sql`
+    SELECT id
+    FROM users
+    WHERE name ILIKE ${trimmedName}
+    LIMIT 1
+  `;
+
+  if (existingUserByName.length > 0) {
+    return { error: 'Detta namn används redan av en medlem. Välj ett annat.' };
   }
 
   const existing = await sql`
     SELECT COUNT(*)::int AS count
     FROM member_requests
-    WHERE email = ${email}
+    WHERE email ILIKE ${trimmedEmail}
   `;
 
   const count = Number((existing as { count: number }[])[0]?.count ?? 0);
@@ -36,7 +56,7 @@ export async function createMemberRequest(
 
   await sql`
     INSERT INTO member_requests (name, email, motivation)
-    VALUES (${name}, ${email}, ${motivation})
+    VALUES (${trimmedName}, ${trimmedEmail}, ${trimmedMotivation})
   `;
 
   redirect('/bli-medlem/tack');

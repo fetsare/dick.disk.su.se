@@ -16,7 +16,7 @@ export function MemberCard({ member, color = 'purple' }: ExperimentalMemberCardP
   const memberLength = formatMembershipDuration(member.membershipStartDate);
   const profileImageSrc: string =
     typeof member.profile_image_url === 'string' && member.profile_image_url.length > 0
-  ? member.profile_image_url
+      ? member.profile_image_url
       : '/sheep.jpg';
 
   const titleGradientClass =
@@ -29,7 +29,7 @@ export function MemberCard({ member, color = 'purple' }: ExperimentalMemberCardP
   return (
     <div className="flex flex-col items-center gap-2 mb-1.5 relative">
       <Link
-        href={`/profil/${member.id}`}
+        href={`/profil/${member.slug}`}
         className="flex flex-col overflow-hidden h-80 w-48 rounded-2xl bg-[#d8c29a] p-1 shadow-[0_4px_8px_rgba(0,0,0,0.35)] border-8 border-[#d8c29a] text-black font-serif focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-royal-gold-400 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent"
       >
         <div
@@ -43,7 +43,6 @@ export function MemberCard({ member, color = 'purple' }: ExperimentalMemberCardP
             src={profileImageSrc}
             alt={member.name}
             fill
-            
             sizes="(max-width: 768px) 12rem, 12rem"
             className="object-cover"
           />

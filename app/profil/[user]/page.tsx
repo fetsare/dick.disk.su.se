@@ -4,8 +4,6 @@ import { neon } from '@neondatabase/serverless';
 import Image from 'next/image';
 import { PageTitle } from '@/components/PageTitle';
 
-export const revalidate = 60;
-
 type Member = {
   id: string;
   name: string;
@@ -16,7 +14,7 @@ type Member = {
   colonist_link?: string | null;
 };
 
-async function getMemberById(id: string): Promise<Member | null> {
+async function getMemberBySlug(slug: string): Promise<Member | null> {
   const databaseUrl = process.env.DATABASE_URL;
   if (!databaseUrl) {
     throw new Error('DATABASE_URL is not set');
@@ -27,7 +25,7 @@ async function getMemberById(id: string): Promise<Member | null> {
   const rows = await sql`
     SELECT id, name, profile_image_url, created_at, description, colonist_link
     FROM users
-    WHERE id = ${id} AND is_active = TRUE
+    WHERE slug ILIKE ${slug} AND is_active = TRUE
     LIMIT 1
   `;
 
@@ -44,7 +42,7 @@ export async function generateMetadata(props: {
   const { params } = props;
   const { user } = await params;
 
-  const member = await getMemberById(user);
+  const member = await getMemberBySlug(user);
 
   if (!member) {
     return {
@@ -84,7 +82,7 @@ export default async function ProfilePage(props: { params: Promise<{ user: strin
   const { params } = props;
   const { user } = await params;
 
-  const member = await getMemberById(user);
+  const member = await getMemberBySlug(user);
 
   if (!member) {
     notFound();
@@ -99,14 +97,10 @@ export default async function ProfilePage(props: { params: Promise<{ user: strin
       <div className="mt-6 flex justify-center">
         <div className="relative h-48 w-48 rounded-full overflow-hidden border md:h-64 md:w-64">
           {member.profile_image_url ? (
-            <a
-        href={member.profile_image_url}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
+            <a href={member.profile_image_url} target="_blank" rel="noopener noreferrer">
               <div className="relative h-48 w-48 md:h-64 md:w-64">
                 <Image
-          src={member.profile_image_url}
+                  src={member.profile_image_url}
                   alt={member.name}
                   fill
                   sizes="(max-width: 768px) 10rem, 12rem"

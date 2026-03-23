@@ -12,6 +12,7 @@ export const metadata: Metadata = pagesMetadata.members;
 type Member = {
   id: string;
   name: string;
+  slug: string;
   profile_image_url?: string | null;
   created_at: string;
   description?: string | null;
@@ -27,7 +28,7 @@ async function getMembers(): Promise<Member[]> {
   const sql = neon(databaseUrl);
 
   const rows = await sql`
-  SELECT id, name, role, profile_image_url, created_at, description, colonist_link
+  SELECT id, name, slug, role, profile_image_url, created_at, description, colonist_link
     FROM users
     WHERE is_active = TRUE
     ORDER BY name ASC
@@ -61,6 +62,7 @@ export default async function Members() {
                 member={{
                   id: member.id,
                   email: '',
+                  slug: member.slug,
                   name: member.name,
                   role: 'member',
                   created_at: member.created_at,

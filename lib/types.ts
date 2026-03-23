@@ -4,6 +4,7 @@ export type UserDb = {
   id: string; //uuid
   email: string;
   name: string;
+  slug: string;
   password_hash: string | null;
   role: UserRole;
   created_at: Date | string;

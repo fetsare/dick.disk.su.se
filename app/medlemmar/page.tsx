@@ -31,7 +31,7 @@ async function getMembers(): Promise<Member[]> {
   SELECT id, name, slug, role, profile_image_url, created_at, description, colonist_link
     FROM users
     WHERE is_active = TRUE
-    ORDER BY name ASC
+    ORDER BY created_at ASC
   `;
 
   return rows as Member[];

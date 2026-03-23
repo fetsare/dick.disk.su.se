@@ -78,7 +78,7 @@ export default async function Members() {
         </div>
       </div>
       <Link href={'/bli-medlem'}>
-        <Button type="submit" className="mt-2 rounded-full text-lg">
+        <Button type="submit" className="mt-8 rounded-full text-lg">
           Ansök om medlemskap
         </Button>
       </Link>

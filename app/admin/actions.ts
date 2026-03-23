@@ -16,6 +16,26 @@ export type MemberRequest = {
   created_at: string;
 };
 
+export async function getLatestHandledRequests(limit = 100): Promise<MemberRequest[]> {
+  await requireAdmin();
+  const databaseUrl = process.env.DATABASE_URL;
+  if (!databaseUrl) {
+    throw new Error('DATABASE_URL is not set');
+  }
+
+  const sql = neon(databaseUrl);
+
+  const rows = await sql`
+    SELECT id, email, name, motivation, status, created_at
+    FROM member_requests
+    WHERE status IN ('approved', 'rejected')
+    ORDER BY reviewed_at DESC NULLS LAST, created_at DESC
+    LIMIT ${limit}
+  `;
+
+  return rows as MemberRequest[];
+}
+
 export async function getPendingRequests(): Promise<MemberRequest[]> {
   await requireAdmin();
   const databaseUrl = process.env.DATABASE_URL;

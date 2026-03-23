@@ -34,6 +34,15 @@ export async function updateProfile(formData: FormData) {
   const trimmedColonistLink =
     typeof colonistLink === 'string' && colonistLink.trim().length > 0 ? colonistLink.trim() : null;
 
+  if (
+    trimmedColonistLink &&
+    !/^https?:\/\/(?:www\.)?colonist\.io\//i.test(trimmedColonistLink)
+  ) {
+    return {
+      error: 'Endast länkar till colonist.io är tillåtna.',
+    } as const;
+  }
+
   if (!trimmedName || !trimmedEmail) {
     return { error: 'Namn och e‑post får inte vara tomma.' };
   }

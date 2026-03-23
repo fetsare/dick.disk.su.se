@@ -4,6 +4,7 @@ import { useState, useTransition } from 'react';
 import { Button } from '@/components/Button';
 import type { MemberRequest } from './actions';
 import { approveRequest, rejectRequest } from './actions';
+import { toast } from 'sonner';
 
 type AdminRequestsProps = {
   initialRequests: MemberRequest[];
@@ -12,26 +13,34 @@ type AdminRequestsProps = {
 export function AdminRequests({ initialRequests }: AdminRequestsProps) {
   const [requests, setRequests] = useState(initialRequests);
   const [isPending, startTransition] = useTransition();
-  const [lastTempPassword, setLastTempPassword] = useState<string | null>(null);
-  const [lastEmail, setLastEmail] = useState<string | null>(null);
 
   const handleApprove = (id: string) => {
     startTransition(async () => {
-      const result = await approveRequest(id);
-      if (result?.tempPassword) {
-        setLastTempPassword(result.tempPassword);
-        if (result.email) {
-          setLastEmail(result.email);
+      try {
+        const result = await approveRequest(id);
+        if (result?.success) {
+          setRequests((prev) => prev.filter((r) => r.id !== id));
+          toast.success('Ansökan godkänd. E‑post med inloggningsuppgifter har skickats.');
+        } else {
+          toast.error('Kunde inte godkänna ansökan.');
         }
+      } catch (err) {
+        console.error(err);
+        toast.error('Något gick fel vid godkännande av ansökan.');
       }
-      setRequests((prev) => prev.filter((r) => r.id !== id));
     });
   };
 
   const handleReject = (id: string) => {
     startTransition(async () => {
-      await rejectRequest(id);
-      setRequests((prev) => prev.filter((r) => r.id !== id));
+      try {
+        await rejectRequest(id);
+        setRequests((prev) => prev.filter((r) => r.id !== id));
+        toast.success('Ansökan har avslagits.');
+      } catch (err) {
+        console.error(err);
+        toast.error('Något gick fel vid avslag av ansökan.');
+      }
     });
   };
 
@@ -39,23 +48,6 @@ export function AdminRequests({ initialRequests }: AdminRequestsProps) {
     return (
       <div className="space-y-3 text-sm">
         <p className="text-foreground/70">Inga väntande ansökningar.</p>
-        {lastTempPassword && (
-          <div className="rounded-md border border-border bg-background/60 p-3">
-            <p className="font-semibold mb-1">Senast genererade lösenord</p>
-            <code className="break-all text-sm">{lastTempPassword}</code>
-            <p className="mt-1 text-xs text-foreground/70">
-              Kopiera detta lösenord och skicka det till medlemmen via{' '}
-              {lastEmail ? (
-                <a href={`mailto:${lastEmail}`} className="underline hover:text-royal-gold-400">
-                  e‑post
-                </a>
-              ) : (
-                'e‑post'
-              )}
-              .
-            </p>
-          </div>
-        )}
       </div>
     );
   }
@@ -96,24 +88,6 @@ export function AdminRequests({ initialRequests }: AdminRequestsProps) {
           </li>
         ))}
       </ul>
-
-      {lastTempPassword && (
-        <div className="rounded-md border border-border bg-background/60 p-3 text-sm">
-          <p className="font-semibold mb-1">Senast genererade tillfälliga lösenord</p>
-          <code className="break-all text-sm">{lastTempPassword}</code>
-          <p className="mt-1 text-xs text-foreground/70">
-            Kopiera detta lösenord och skicka det till medlemmen via{' '}
-            {lastEmail ? (
-              <a href={`mailto:${lastEmail}`} className="underline hover:text-royal-gold-400">
-                e‑post
-              </a>
-            ) : (
-              'e‑post'
-            )}
-            .
-          </p>
-        </div>
-      )}
     </div>
   );
 }

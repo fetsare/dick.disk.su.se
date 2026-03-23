@@ -6,6 +6,7 @@ import { requireAdmin } from '@/lib/session';
 import { hashPassword } from '@/lib/hash-password';
 import { generateTempPassword } from '@/lib/generate-temp-password';
 import { generateSlugFromName } from '@/lib/slug';
+import { sendTempPasswordEmail } from '@/lib/brevo';
 
 export type MemberRequest = {
   id: string;
@@ -67,7 +68,7 @@ export async function approveRequest(id: string) {
 
     reqEmail = req.email;
 
-  const slug = generateSlugFromName(req.name);
+    const slug = generateSlugFromName(req.name);
 
     await sql`
       UPDATE member_requests
@@ -88,8 +89,11 @@ export async function approveRequest(id: string) {
     throw err;
   }
 
+  // Skicka välkomstmail med det temporära lösenordet
+  await sendTempPasswordEmail(reqEmail, tempPassword);
+
   revalidatePath('/admin');
-  return { tempPassword, email: reqEmail };
+  return { success: true as const };
 }
 
 export async function createMemberAccount(name: string, email: string) {
@@ -122,8 +126,11 @@ export async function createMemberAccount(name: string, email: string) {
     throw err;
   }
 
+  // Skicka välkomstmail med det temporära lösenordet
+  await sendTempPasswordEmail(email, tempPassword);
+
   revalidatePath('/admin');
-  return { tempPassword, email };
+  return { success: true as const };
 }
 
 export async function rejectRequest(id: string) {

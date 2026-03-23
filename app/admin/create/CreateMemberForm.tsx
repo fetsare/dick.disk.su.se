@@ -4,12 +4,12 @@ import { useState, useTransition } from 'react';
 import { createMemberAccount } from '../actions';
 import { Button } from '@/components/Button';
 import { FormField } from '@/components/FormField';
+import { toast } from 'sonner';
 
 export function CreateMemberForm() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [error, setError] = useState<string | null>(null);
-  const [result, setResult] = useState<{ tempPassword: string; email: string } | null>(null);
   const [isPending, startTransition] = useTransition();
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -24,7 +24,13 @@ export function CreateMemberForm() {
     startTransition(async () => {
       try {
         const created = await createMemberAccount(name.trim(), email.trim());
-        setResult(created);
+        if (created?.success) {
+          toast.success('Konto skapat. E‑post med inloggningsuppgifter har skickats.');
+          setName('');
+          setEmail('');
+        } else {
+          toast.error('Kunde inte skapa konto. Försök igen senare.');
+        }
       } catch (err) {
         console.error(err);
         setError('Kunde inte skapa konto. Kontrollera uppgifterna och försök igen.');
@@ -66,24 +72,6 @@ export function CreateMemberForm() {
           {isPending ? 'Skapar konto...' : 'Skapa konto'}
         </Button>
       </form>
-
-      {result && (
-        <div className="rounded-md border border-border bg-background/60 p-3 text-sm">
-          <p className="font-semibold mb-1">Konto skapat</p>
-          <p>
-            Ett konto har skapats för <span className="font-semibold">{result.email}</span>.
-          </p>
-          <p className="mt-2 font-semibold">Tillfälligt lösenord:</p>
-          <code className="break-all text-sm">{result.tempPassword}</code>
-          <p className="mt-1 text-xs text-foreground/70">
-            Kopiera detta lösenord och skicka det till medlemmen via{' '}
-            <a href={`mailto:${result.email}`} className="underline hover:text-royal-gold-400">
-              e‑post
-            </a>
-            .
-          </p>
-        </div>
-      )}
     </div>
   );
 }

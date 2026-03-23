@@ -12,13 +12,14 @@ export function HandledRequestsTable({ requests }: HandledRequestsTableProps) {
         <p className="text-sm text-foreground/70">Inga hanterade ansökningar ännu.</p>
       ) : (
         <div className="overflow-x-auto">
-          <table className="w-full text-sm border-collapse">
+      <table className="w-full text-sm border-collapse">
             <thead>
               <tr className="border-b border-border text-left text-xs uppercase tracking-wide text-foreground/60">
                 <th className="py-2 pr-3">Namn</th>
                 <th className="py-2 px-3">E‑post</th>
                 <th className="py-2 px-3">Status</th>
-                <th className="py-2 pl-3">Skickad</th>
+        <th className="py-2 px-3">Skickad</th>
+        <th className="py-2 pl-3 text-right">Granskad av</th>
               </tr>
             </thead>
             <tbody>
@@ -37,8 +38,11 @@ export function HandledRequestsTable({ requests }: HandledRequestsTableProps) {
                       {req.status === 'approved' ? 'Godkänd' : 'Avslagen'}
                     </span>
                   </td>
-                  <td className="py-2 pl-3 align-top text-xs text-foreground/70">
+                  <td className="py-2 px-3 align-top text-xs text-foreground/70">
                     {new Date(req.created_at).toLocaleString('sv-SE')}
+                  </td>
+                  <td className="py-2 pl-3 align-top text-xs text-foreground/80 text-right">
+                    {req.reviewed_by_name ?? '—'}
                   </td>
                 </tr>
               ))}

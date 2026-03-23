@@ -14,6 +14,7 @@ export type MemberRequest = {
   motivation: string;
   status: string;
   created_at: string;
+  reviewed_by_name?: string | null;
 };
 
 export async function getLatestHandledRequests(limit = 100): Promise<MemberRequest[]> {
@@ -26,10 +27,18 @@ export async function getLatestHandledRequests(limit = 100): Promise<MemberReque
   const sql = neon(databaseUrl);
 
   const rows = await sql`
-    SELECT id, email, name, motivation, status, created_at
-    FROM member_requests
-    WHERE status IN ('approved', 'rejected')
-    ORDER BY reviewed_at DESC NULLS LAST, created_at DESC
+    SELECT
+      mr.id,
+      mr.email,
+      mr.name,
+      mr.motivation,
+      mr.status,
+      mr.created_at,
+      u.name AS reviewed_by_name
+    FROM member_requests mr
+    LEFT JOIN users u ON u.id = mr.reviewed_by
+    WHERE mr.status IN ('approved', 'rejected')
+    ORDER BY mr.reviewed_at DESC NULLS LAST, mr.created_at DESC
     LIMIT ${limit}
   `;
 

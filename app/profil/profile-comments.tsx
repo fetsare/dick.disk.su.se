@@ -5,7 +5,7 @@ import type { ProfileComment } from './comments-actions';
 import { addProfileComment, getProfileComments } from './comments-actions';
 import { Button } from '@/components/Button';
 
-const MAX_COMMENT_LENGTH = 250;
+const MAX_COMMENT_LENGTH = 500;
 
 type ProfileCommentsProps = {
   profileUserId: string;

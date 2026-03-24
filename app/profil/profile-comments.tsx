@@ -12,7 +12,11 @@ type ProfileCommentsProps = {
   initialComments: ProfileComment[];
 };
 
-export function ProfileComments({ profileUserId, initialComments, isLoggedIn }: ProfileCommentsProps & { isLoggedIn: boolean }) {
+export function ProfileComments({
+  profileUserId,
+  initialComments,
+  isLoggedIn,
+}: ProfileCommentsProps & { isLoggedIn: boolean }) {
   const [comments, setComments] = useState(initialComments);
   const [offset, setOffset] = useState(initialComments.length);
   const [hasMore, setHasMore] = useState(initialComments.length === 10);
@@ -73,34 +77,7 @@ export function ProfileComments({ profileUserId, initialComments, isLoggedIn }: 
   return (
     <div className="space-y-2">
       <h2 className="text-lg font-semibold">Kommentarer</h2>
-      {isLoggedIn ? (
-        <form onSubmit={handleSubmit} className="space-y-2 mb-4">
-          <textarea
-            className="w-full min-h-20 rounded border border-border bg-background/60 px-3 py-2 text-sm"
-            placeholder="Skriv en kommentar..."
-            value={content}
-            onChange={(e) => setContent(e.target.value)}
-            maxLength={MAX_COMMENT_LENGTH}
-            disabled={isPending}
-          />
-          <div className="flex items-center justify-between text-xs text-foreground/60">
-            <span>{remaining} tecken kvar</span>
-          </div>
-          {error && <p className="text-sm text-red-500">{error}</p>}
-          <Button className='w-full' type="submit" disabled={isPending || !content.trim()}>
-            {isPending ? 'Skickar...' : 'Skicka kommentar'}
-          </Button>
-        </form>
-      ) : (
-        <p className="text-sm text-foreground/70">
-          Du måste vara inloggad för att kommentera.{' '}
-          <a href="/login" className="underline hover:text-royal-gold-400">
-            Logga in här.
-          </a>
-        </p>
-      )}
-
-      <div className="space-y-4">
+      <div className="space-y-2">
         {comments.length === 0 ? (
           <p className="text-sm text-foreground/70">Inga kommentarer ännu.</p>
         ) : (
@@ -130,6 +107,32 @@ export function ProfileComments({ profileUserId, initialComments, isLoggedIn }: 
           </>
         )}
       </div>
+      {isLoggedIn ? (
+        <form onSubmit={handleSubmit} className="space-y-2 mb-4">
+          <textarea
+            className="w-full min-h-20 rounded border border-border bg-background/60 px-3 py-2 text-sm"
+            placeholder="Skriv en kommentar..."
+            value={content}
+            onChange={(e) => setContent(e.target.value)}
+            maxLength={MAX_COMMENT_LENGTH}
+            disabled={isPending}
+          />
+          <div className="flex items-center justify-between text-xs text-foreground/60">
+            <span>{remaining} tecken kvar</span>
+          </div>
+          {error && <p className="text-sm text-red-500">{error}</p>}
+          <Button className="w-full" type="submit" disabled={isPending || !content.trim()}>
+            {isPending ? 'Skickar...' : 'Skicka kommentar'}
+          </Button>
+        </form>
+      ) : (
+        <p className="text-sm text-foreground/70">
+          Du måste vara inloggad för att kommentera.{' '}
+          <a href="/login" className="underline hover:text-royal-gold-400">
+            Logga in här.
+          </a>
+        </p>
+      )}
     </div>
   );
 }

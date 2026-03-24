@@ -12,6 +12,7 @@ type ProfileFormProps = {
   name: string;
   email: string;
   role: 'admin' | 'member';
+  title: string;
   profileImageUrl?: string | null;
   description?: string | null;
 };
@@ -19,6 +20,7 @@ export function ProfileForm({
   name,
   email,
   role,
+  title,
   profileImageUrl,
   description,
   colonist_link,
@@ -84,6 +86,11 @@ export function ProfileForm({
             label="Colonist.io-länk"
             defaultValue={colonist_link ?? ''}
           />
+
+          <div>
+            <dt className="font-semibold">Titel</dt>
+            <dd className="mt-1">{title}</dd>
+          </div>
 
           <div>
             <dt className="font-semibold">Roll</dt>

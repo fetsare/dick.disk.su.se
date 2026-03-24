@@ -18,6 +18,7 @@ export default async function ProfilePage() {
       name={user.name}
       email={user.email}
       role={user.role}
+      title={user.title}
       profileImageUrl={user.profile_image_url}
       description={user.description}
       colonist_link={user.colonist_link}

@@ -62,7 +62,7 @@ export async function getCurrentUser(): Promise<UserDb | null> {
   const sql = neon(databaseUrl);
 
   const result = await sql`
-  SELECT id, email, name, role, password_hash, created_at, is_active, profile_image_url, description, colonist_link
+  SELECT id, email, name, role, password_hash, created_at, is_active, title, profile_image_url, description, colonist_link
     FROM users
     WHERE id = ${payload.sub}
       AND is_active = TRUE

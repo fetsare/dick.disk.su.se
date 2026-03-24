@@ -7,10 +7,12 @@ import { formatMembershipDuration } from '@/lib/format-membership-duration';
 import { getCurrentUser } from '@/lib/session';
 import { getProfileComments } from '../comments-actions';
 import { ProfileComments } from '../profile-comments';
+import TitleBadge from '@/components/TitleBadge';
 
 type Member = {
   id: string;
   name: string;
+  title: string;
   profile_image_url?: string | null;
   created_at: string;
   updated_at?: string;
@@ -27,7 +29,7 @@ async function getMemberBySlug(slug: string): Promise<Member | null> {
   const sql = neon(databaseUrl);
 
   const rows = await sql`
-    SELECT id, name, profile_image_url, created_at, description, colonist_link
+    SELECT id, name, title, profile_image_url, created_at, description, colonist_link
     FROM users
     WHERE slug ILIKE ${slug} AND is_active = TRUE
     LIMIT 1
@@ -130,17 +132,17 @@ export default async function ProfilePage(props: { params: Promise<{ user: strin
           )}
         </div>
       </div>
+          <TitleBadge className='mt-4 rounded-md' title={member.title} />
 
       {hasDescription && (
-        <section className="m-8 flex flex-col gap-4">
-          <div className="border-4 max-w-80 border-[#b69a6d] bg-[#f5e7c7] px-4 h-full text-center text-[11px] leading-snug text-[#3b2c1c] flex items-center justify-center rounded-md">
+        <section className="m-4 flex flex-col gap-4">
+          <div className="flex flex-col border-4 max-w-80 border-[#b69a6d] bg-[#f5e7c7] px-4 h-full text-center text-[11px] leading-snug text-[#3b2c1c] items-center justify-center rounded-md">
             {member.description && (
               <div className="p-2 text-[15px] text-black font-minion-italic max-h-full overflow-hidden text-ellipsis">
                 {member.description}
               </div>
             )}
           </div>
-
           <p className="text-md text-center">Har varit medlem i {memberLength}</p>
           {member.colonist_link && (
             <div className="flex justify-center">

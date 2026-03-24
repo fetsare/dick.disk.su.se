@@ -9,6 +9,7 @@ export type UserDb = {
   role: UserRole;
   created_at: Date | string;
   is_active: boolean;
+  title: string;
   profile_image_url?: string | null;
   description?: string | null;
   colonist_link?: string | null;

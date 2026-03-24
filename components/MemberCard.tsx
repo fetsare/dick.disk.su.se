@@ -3,6 +3,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { Expand } from 'lucide-react';
 import type { User } from '@/lib/types';
+import TitleBadge from './TitleBadge';
 
 type CardColorVariant = 'green' | 'purple' | 'brown';
 
@@ -33,7 +34,7 @@ export function MemberCard({ member, color = 'purple' }: ExperimentalMemberCardP
         <div
           className={`${titleGradientClass} px-3 py-1.5 text-center text-xs font-semibold tracking-[0.14em] text-black uppercase shadow-[0_2px_3px_rgba(0,0,0,0.4)]`}
         >
-          {member.name}
+          <div>{member.name}</div>
         </div>
 
         <div className="relative bg-black h-96 overflow-hidden">
@@ -57,6 +58,7 @@ export function MemberCard({ member, color = 'purple' }: ExperimentalMemberCardP
             </div>
           )}
         </div>
+          <TitleBadge className="z-10" title={member.title} />
       </Link>
       {member.colonist_link && (
         <Link
@@ -73,6 +75,7 @@ export function MemberCard({ member, color = 'purple' }: ExperimentalMemberCardP
           />
         </Link>
       )}
+      
     </div>
   );
 }

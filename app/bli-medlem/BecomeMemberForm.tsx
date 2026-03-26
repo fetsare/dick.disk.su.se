@@ -18,7 +18,7 @@ export function BecomeMemberForm() {
         name="name"
         label="Namn"
         type="text"
-        placeholder="Jeffery Epstein"
+        placeholder="Klaus Teuber"
         required
       />
       <FormField

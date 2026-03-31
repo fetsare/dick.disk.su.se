@@ -32,12 +32,12 @@ export function MemberCard({ member, color = 'purple' }: ExperimentalMemberCardP
         className="flex flex-col overflow-hidden h-80 w-48 rounded-2xl bg-[#d8c29a] p-1 shadow-[0_4px_8px_rgba(0,0,0,0.35)] border-8 border-[#d8c29a] text-black font-serif focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-royal-gold-400 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent"
       >
         <div
-          className={`${titleGradientClass} px-3 py-1.5 text-center text-xs font-semibold tracking-[0.14em] text-black uppercase shadow-[0_2px_3px_rgba(0,0,0,0.4)]`}
+          className={`${titleGradientClass} px-3 py-1.5 text-center text-xs font-semibold tracking-[0.14em] text-black uppercase shadow-[0_2px_3px_rgba(0,0,0,0.4)] shrink-0`}
         >
           <div>{member.name}</div>
         </div>
 
-        <div className="relative bg-black h-96 overflow-hidden">
+        <div className="relative bg-black flex-1 min-h-0 overflow-hidden">
           <Image
             src={profileImageSrc}
             alt={member.name}
@@ -51,9 +51,9 @@ export function MemberCard({ member, color = 'purple' }: ExperimentalMemberCardP
           </div>
         </div>
 
-        <div className="border-t border-[#b69a6d] bg-[#f5e7c7] px-4 h-full text-center text-[11px] leading-snug text-[#3b2c1c] flex items-center justify-center">
+        <div className="border-t border-[#b69a6d] bg-[#f5e7c7] px-3 py-2 text-center text-[11px] leading-snug text-[#3b2c1c] flex items-center justify-center shrink-0 min-h-6">
           {member.description && (
-            <div className="text-[15px] text-black font-minion-italic max-h-full overflow-hidden text-ellipsis">
+            <div className="text-[15px] leading-tight text-black font-minion-italic line-clamp-8 text-ellipsis">
               {member.description}
             </div>
           )}

@@ -106,33 +106,31 @@ export default async function ProfilePage(props: { params: Promise<{ user: strin
       <PageTitle>{member.name}</PageTitle>
 
       <div className="mt-6 flex justify-center">
-        <div className="relative h-48 w-48 rounded-full overflow-hidden border md:h-64 md:w-64">
-          {member.profile_image_url ? (
-            <a href={member.profile_image_url} target="_blank" rel="noopener noreferrer">
-              <div className="relative h-48 w-48 md:h-64 md:w-64">
-                <Image
-                  src={member.profile_image_url}
-                  alt={member.name}
-                  fill
-                  sizes="(max-width: 768px) 10rem, 12rem"
-                  className="object-cover"
-                />
-              </div>
-            </a>
-          ) : (
+        {member.profile_image_url ? (
+          <a href={member.profile_image_url} target="_blank" rel="noopener noreferrer">
             <div className="relative h-48 w-48 md:h-64 md:w-64">
               <Image
-                src="/sheep.jpg"
-                alt="Ingen profilbild"
+                src={member.profile_image_url}
+                alt={member.name}
                 fill
                 sizes="(max-width: 768px) 10rem, 12rem"
-                className="object-cover"
+                className="object-contain"
               />
             </div>
-          )}
-        </div>
+          </a>
+        ) : (
+          <div className="relative h-48 w-48 md:h-64 md:w-64">
+            <Image
+              src="/sheep.jpg"
+              alt="Ingen profilbild"
+              fill
+              sizes="(max-width: 768px) 10rem, 12rem"
+              className="object-contain"
+            />
+          </div>
+        )}
       </div>
-          <TitleBadge className='mt-4 rounded-md' title={member.title} />
+      <TitleBadge className="mt-4 rounded-md" title={member.title} />
 
       {hasDescription && (
         <section className="m-4 flex flex-col gap-4">

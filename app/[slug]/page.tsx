@@ -5,8 +5,8 @@ import Image from 'next/image';
 import { PageTitle } from '@/components/PageTitle';
 import { formatMembershipDuration } from '@/lib/format-membership-duration';
 import { getCurrentUser } from '@/lib/session';
-import { getProfileComments } from '../comments-actions';
-import { ProfileComments } from '../profile-comments';
+import { getProfileComments } from '../profil/comments-actions';
+import { ProfileComments } from '../profil/profile-comments';
 import TitleBadge from '@/components/TitleBadge';
 
 type Member = {
@@ -43,12 +43,12 @@ async function getMemberBySlug(slug: string): Promise<Member | null> {
 }
 
 export async function generateMetadata(props: {
-  params: Promise<{ user: string }>;
+  params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { params } = props;
-  const { user } = await params;
+  const { slug } = await params;
 
-  const member = await getMemberBySlug(user);
+  const member = await getMemberBySlug(slug);
 
   if (!member) {
     return {
@@ -84,11 +84,11 @@ export async function generateMetadata(props: {
   };
 }
 
-export default async function ProfilePage(props: { params: Promise<{ user: string }> }) {
+export default async function ProfilePage(props: { params: Promise<{ slug: string }> }) {
   const { params } = props;
-  const { user } = await params;
+  const { slug } = await params;
 
-  const member = await getMemberBySlug(user);
+  const member = await getMemberBySlug(slug);
 
   if (!member) {
     notFound();

@@ -29,10 +29,6 @@ export const BASE_NAVIGATION_ITEMS: NavbarItem[] = [
     link: '/',
   },
   {
-    label: 'Medlemmar',
-    link: '/medlemmar',
-  },
-  {
     label: 'Bli medlem',
     link: '/bli-medlem',
   },

@@ -133,9 +133,9 @@ export async function updateProfile(formData: FormData) {
     `;
   }
 
-  revalidatePath('/medlemmar');
+  revalidatePath('/');
   revalidatePath('/profil');
-  revalidatePath(`/profil/${user.id}`);
+  revalidatePath(`/${slug}`);
 
   return { success: true as const };
 }
@@ -207,9 +207,9 @@ export async function uploadProfileImage(formData: FormData) {
     } catch {}
   }
 
-  revalidatePath('/medlemmar');
+  revalidatePath('/');
   revalidatePath('/profil');
-  revalidatePath(`/profil/${user.id}`);
+  revalidatePath(`/${user.slug}`);
 
   return { success: true as const, url: newUrl };
 }

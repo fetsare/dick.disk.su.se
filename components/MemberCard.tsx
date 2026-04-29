@@ -28,7 +28,7 @@ export function MemberCard({ member, color = 'purple' }: ExperimentalMemberCardP
   return (
     <div className="flex flex-col items-center gap-2 mb-1.5 relative">
       <Link
-        href={`/profil/${member.slug}`}
+        href={`/${member.slug}`}
         className="flex flex-col overflow-hidden h-80 w-48 rounded-2xl bg-[#d8c29a] p-1 shadow-[0_4px_8px_rgba(0,0,0,0.35)] border-8 border-[#d8c29a] text-black font-serif focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-royal-gold-400 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent"
       >
         <div

@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useTransition, FormEvent } from 'react';
+import Link from 'next/link';
 import type { ProfileComment } from './comments-actions';
 import { addProfileComment, getProfileComments } from './comments-actions';
 import { Button } from '@/components/Button';
@@ -128,9 +129,9 @@ export function ProfileComments({
       ) : (
         <p className="text-sm text-foreground/70">
           Du måste vara inloggad för att kommentera.{' '}
-          <a href="/login" className="underline hover:text-royal-gold-400">
+          <Link href="/login" className="underline hover:text-royal-gold-400">
             Logga in här.
-          </a>
+          </Link>
         </p>
       )}
     </div>

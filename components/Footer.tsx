@@ -151,9 +151,12 @@ export default function Footer() {
               rel="noreferrer"
               className="flex items-center justify-center gap-2 lettering text-foreground transition-colors hover:text-royal-gold-400"
             >
-              <img
+              <Image
                 src="https://img.shields.io/github/last-commit/fetsare/dick.disk.su.se"
                 alt="GitHub last commit"
+                width={170}
+                height={20}
+                unoptimized
               />
               GitHub
             </a>
